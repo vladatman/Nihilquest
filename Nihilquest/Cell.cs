@@ -9,6 +9,7 @@ namespace Nihilquest
         private Rectangle rectangle;
         private bool isLegal;
         private Character character;
+        private Item item;
         public Cell(Rectangle rectangle, bool isLegal)
         {
             this.rectangle = rectangle;
@@ -18,10 +19,15 @@ namespace Nihilquest
         public Rectangle Rectangle { get => rectangle; set => rectangle = value; }
         public bool IsLegal { get => isLegal; set => isLegal = value; }
         internal Character Character { get => character; set => character = value; }
-            
+        internal Item Item { get => item; set => item = value; }
+
         public bool hasCharacter()
         {
             return Character != null;
+        }
+        public bool hasItem()
+        {
+            return Item != null;
         }
     }
 }

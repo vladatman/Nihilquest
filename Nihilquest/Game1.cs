@@ -17,6 +17,7 @@ namespace Nihilquest
         Texture2D playerTexture;
         Texture2D enemyTexture;
         Texture2D obstTexture;
+        Texture2D swordTexture;
 
         private int gridSize = 10;
         private int tileSize = 64;
@@ -27,6 +28,8 @@ namespace Nihilquest
 
         private Enemy E1 = new Enemy("mob1",9,5);
         private Enemy E2 = new Enemy("mob2", 3, 3);
+
+        private Item sword = new Item("butterknife", 5);
 
         private Cell[,] tileMap;
 
@@ -54,6 +57,7 @@ namespace Nihilquest
             playerTexture = this.Content.Load<Texture2D>("knight_f_run_anim_f0");
             enemyTexture = this.Content.Load<Texture2D>("imp_idle_anim_f0");
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
+            swordTexture = this.Content.Load<Texture2D>("weapon_knife");
             font = Content.Load<SpriteFont>("UIfont");
 
 
@@ -98,18 +102,23 @@ namespace Nihilquest
             //player model rendering
             _spriteBatch.Draw(playerTexture, tileMap[P1.PosX, P1.PosY].Rectangle, Color.White);
             _spriteBatch.Draw(enemyTexture, tileMap[E1.PosX, E1.PosY].Rectangle, Color.White);
-            _spriteBatch.Draw(enemyTexture, tileMap[E2.PosX, E2.PosY].Rectangle, Color.White);
             tileMap[E1.PosX, E1.PosY].Character = E1;
             tileMap[E1.PosX, E1.PosY].IsLegal = false;
-            tileMap[E2.PosX, E2.PosY].Character = E2;
-            tileMap[E2.PosX, E2.PosY].IsLegal = false;
 
             for (int o = 5; o < gridSize; ++o)
             {
                 createObstacle(o,4);
                 createObstacle(o, 6);
             }
-
+            if (!P1.isInInventory(sword))
+            {
+                _spriteBatch.Draw(swordTexture, tileMap[2, 2].Rectangle, Color.White);
+                tileMap[2, 2].Item = sword;
+            }
+            else
+            {
+                tileMap[2, 2].Item = null;
+            }
             for (int i = 0; i < gridSize; ++i)
             {
                 for (int j = 0; j < gridSize; ++j)
@@ -129,6 +138,10 @@ namespace Nihilquest
                                 P1.PosY = j;
                                 tileMap[P1.PosX, P1.PosY].Character = P1;
                                 playerTurn = false;
+                                if (tileMap[i, j].hasItem())
+                                {
+                                    P1.pickUpItem(sword);
+                                }
                             }
                             else if(mouseState.LeftButton == ButtonState.Pressed && tileMap[i, j].hasCharacter())
                             {
@@ -152,6 +165,13 @@ namespace Nihilquest
         {
             _spriteBatch.Draw(obstTexture, tileMap[posX, posY].Rectangle, Color.White);
             tileMap[posX, posY].IsLegal = false;
+        }
+        public void createEnemy(string name, int posX, int posY)
+        {
+            Enemy E = new Enemy(name, posX, posY);
+            _spriteBatch.Draw(enemyTexture, tileMap[E.PosX, E.PosY].Rectangle, Color.White);
+            tileMap[E.PosX, E.PosY].Character = E;
+            tileMap[E.PosX, E.PosY].IsLegal = false;
         }
     }
 }
