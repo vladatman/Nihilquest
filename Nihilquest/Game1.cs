@@ -24,6 +24,11 @@ namespace Nihilquest
         private int gridSize = 10;
         private int tileSize = 64;
 
+        public static int windowWidth = 960;
+        public static int windowHeight = 640;
+
+        MainMenu main = new MainMenu();
+
         private bool playerTurn = true;
 
         private Player P1 = new Player("Player",0,0);
@@ -49,8 +54,8 @@ namespace Nihilquest
         protected override void Initialize()
         {
             _graphics.IsFullScreen = false;
-            _graphics.PreferredBackBufferWidth = 960;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 640;   // set this value to the desired height of your window
+            _graphics.PreferredBackBufferWidth = windowWidth;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = windowHeight;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
             base.Initialize();
         }
@@ -65,19 +70,20 @@ namespace Nihilquest
             swordTexture = this.Content.Load<Texture2D>("weapon_knife");
             manaTexture = this.Content.Load<Texture2D>("flask_big_blue");
             font = Content.Load<SpriteFont>("UIfont");
+            main.LoadContent(Content);
 
 
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.T))
             {
                 playerTurn = true;
             }
+
+            main.Update();
 
             base.Update(gameTime);
         }
@@ -89,6 +95,8 @@ namespace Nihilquest
               BlendState.AlphaBlend,
               SamplerState.PointClamp,
               null, null, null, null);
+
+            
 
             tileMap = new Cell[gridSize, gridSize];
             MouseState mouseState = Mouse.GetState();
@@ -186,6 +194,8 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "Mana: " + P1.Mana, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "DMG: " + P1.Dmg, new Vector2(670, 70), Color.White);
             _spriteBatch.DrawString(font, "range: " + P1.Range, new Vector2(670, 90), Color.White);
+
+            main.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
