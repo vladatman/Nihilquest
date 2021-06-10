@@ -29,10 +29,22 @@ namespace Nihilquest
 
         public void pickUpItem(Item item)
         {
-            if(item.AddDmg != null)
+            if(item.ItemName == "butterknife")
             {
-                Dmg += item.AddDmg;
+                if (item.AddDmg != null)
+                {
+                    Dmg += item.AddDmg;
+                }
             }
+
+            if (item.ItemName == "manaflask")
+            {
+                if (item.AddMana != null)
+                {
+                    Mana += item.AddMana;
+                }
+            }
+            
             Inventory.Add(item);
         }
         public bool isInInventory(Item item)
