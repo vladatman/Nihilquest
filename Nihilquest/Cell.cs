@@ -25,7 +25,7 @@ namespace Nihilquest
         {
             return Character != null;
         }
-        public bool hasItem(Item item)
+        public bool hasItem()
         {
             return Item != null;
         }

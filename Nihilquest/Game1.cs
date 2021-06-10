@@ -151,15 +151,11 @@ namespace Nihilquest
                                 P1.PosY = j;
                                 tileMap[P1.PosX, P1.PosY].Character = P1;
                                 playerTurn = false;
-                                if (tileMap[i, j].hasItem(sword))
+                                if (tileMap[i, j].hasItem())
                                 {
-                                    P1.pickUpItem(sword);
+                                    P1.pickUpItem(tileMap[i, j].Item);
                                 }
 
-                                if (tileMap[i, j].hasItem(mana))
-                                {
-                                    P1.pickUpItem(mana);
-                                }
                             }
                             else if(mouseState.LeftButton == ButtonState.Pressed && tileMap[i, j].hasCharacter())
                             {
