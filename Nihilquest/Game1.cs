@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Nihilquest
 {
@@ -27,8 +28,9 @@ namespace Nihilquest
 
         private Player P1 = new Player("Player",0,0);
 
-        private Enemy E1 = new Enemy("mob1",9,5);
-        private Enemy E2 = new Enemy("mob2", 3, 3);
+        private List<Enemy> Enemies = new List<Enemy>();
+        private Enemy E = new Enemy("mob1", 9, 5);
+
 
         private Item sword = new Item("butterknife", 5, 0);
         private Item mana = new Item("manaflask", 0, 5);
@@ -40,6 +42,7 @@ namespace Nihilquest
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Enemies.Add(E);
             IsMouseVisible = true;
         }
 
@@ -104,15 +107,26 @@ namespace Nihilquest
             }
             //player model rendering
             _spriteBatch.Draw(playerTexture, tileMap[P1.PosX, P1.PosY].Rectangle, Color.White);
-            _spriteBatch.Draw(enemyTexture, tileMap[E1.PosX, E1.PosY].Rectangle, Color.White);
-            tileMap[E1.PosX, E1.PosY].Character = E1;
-            tileMap[E1.PosX, E1.PosY].IsLegal = false;
-
+            System.Diagnostics.Debug.WriteLine(Enemies.Count);
             for (int o = 5; o < gridSize; ++o)
             {
                 createObstacle(o,4);
-                createObstacle(o, 6);
+                createObstacle(o,6);
             }
+            foreach (Enemy e in Enemies)
+            {
+                if (!e.isDead())
+                {
+                    createEnemy(Enemies);
+                }
+                else
+                {
+                   
+                    tileMap[e.PosX, e.PosY].Character = null;
+                    tileMap[e.PosX, e.PosY].IsLegal = true;
+                }
+            }
+            //item drawing
             if (!P1.isInInventory(sword))
             {
                 _spriteBatch.Draw(swordTexture, tileMap[2, 2].Rectangle, Color.White);
@@ -141,7 +155,6 @@ namespace Nihilquest
                         //hover highlight
                         if (tileMap[i, j].Rectangle.Contains(mouseX, mouseY))
                         {
-                           // _spriteBatch.Draw(tileTexture, tileMap[i, j].Rectangle, null, Color.Blue, 0.0f, Vector2.Zero, SpriteEffects.None, 0);//layer depth template
                             _spriteBatch.Draw(tileTexture, tileMap[i, j].Rectangle,null, Color.Blue * 0.5f);
                             //mouseclick movement
                             if (mouseState.LeftButton == ButtonState.Pressed && tileMap[i, j].IsLegal)
@@ -151,15 +164,17 @@ namespace Nihilquest
                                 P1.PosY = j;
                                 tileMap[P1.PosX, P1.PosY].Character = P1;
                                 playerTurn = false;
+                                //pickup item
                                 if (tileMap[i, j].hasItem())
                                 {
                                     P1.pickUpItem(tileMap[i, j].Item);
                                 }
 
                             }
+                            //attack enemy
                             else if(mouseState.LeftButton == ButtonState.Pressed && tileMap[i, j].hasCharacter())
                             {
-                                P1.Attack(E1);
+                                P1.Attack(tileMap[i,j].Character);
                                 playerTurn = false;
                             }
                         }
@@ -171,7 +186,6 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "Mana: " + P1.Mana, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "DMG: " + P1.Dmg, new Vector2(670, 70), Color.White);
             _spriteBatch.DrawString(font, "range: " + P1.Range, new Vector2(670, 90), Color.White);
-            _spriteBatch.DrawString(font, "Enemy HP: " + E1.Hp, new Vector2(670, 110), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -181,12 +195,15 @@ namespace Nihilquest
             _spriteBatch.Draw(obstTexture, tileMap[posX, posY].Rectangle, Color.White);
             tileMap[posX, posY].IsLegal = false;
         }
-        public void createEnemy(string name, int posX, int posY)
+        private void createEnemy(List<Enemy> enemies)
         {
-            Enemy E = new Enemy(name, posX, posY);
-            _spriteBatch.Draw(enemyTexture, tileMap[E.PosX, E.PosY].Rectangle, Color.White);
-            tileMap[E.PosX, E.PosY].Character = E;
-            tileMap[E.PosX, E.PosY].IsLegal = false;
+            foreach (Enemy e in enemies)
+            {
+                _spriteBatch.Draw(enemyTexture, tileMap[e.PosX, e.PosY].Rectangle, Color.White);
+                tileMap[e.PosX, e.PosY].Character = e;
+                tileMap[e.PosX, E.PosY].IsLegal = false;
+            }
+
         }
     }
 }

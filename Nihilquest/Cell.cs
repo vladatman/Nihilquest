@@ -18,8 +18,8 @@ namespace Nihilquest
 
         public Rectangle Rectangle { get => rectangle; set => rectangle = value; }
         public bool IsLegal { get => isLegal; set => isLegal = value; }
-        internal Character Character { get => character; set => character = value; }
-        internal Item Item { get => item; set => item = value; }
+        public Character Character { get => character; set => character = value; }
+        public Item Item { get => item; set => item = value; }
 
         public bool hasCharacter()
         {
