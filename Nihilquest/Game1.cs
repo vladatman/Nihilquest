@@ -199,7 +199,9 @@ namespace Nihilquest
         {
             foreach (Enemy e in enemies)
             {
+          
                 _spriteBatch.Draw(enemyTexture, tileMap[e.PosX, e.PosY].Rectangle, Color.White);
+                _spriteBatch.DrawString(font, "HP:"+e.Hp, new Vector2(tileMap[e.PosX, e.PosY].Rectangle.X, tileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
                 tileMap[e.PosX, e.PosY].Character = e;
                 tileMap[e.PosX, E.PosY].IsLegal = false;
             }
