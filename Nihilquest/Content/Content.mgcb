@@ -104,6 +104,18 @@
 /processorParam:TextureFormat=Color
 /build:testchar.png
 
+#begin ui_heart_full.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui_heart_full.png
+
 #begin wall_mid.png
 /importer:TextureImporter
 /processor:TextureProcessor
