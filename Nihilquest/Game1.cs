@@ -197,11 +197,22 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
             // Inventory
             int invY = 30;
+            int itemDmg = 5;
+            int itemMana = 5;
             foreach (Item item in P1.Inventory)
             {
-               
-                _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
-                invY += 20;
+               if(item.ItemName == "butterknife")
+                {
+                    _spriteBatch.DrawString(font, "" + item.ItemName + " +" + itemDmg + " DMG", new Vector2(770, invY), Color.White);
+                    invY += 20;
+                    itemDmg += 5;
+                }
+               if(item.ItemName == "manaflask")
+                {
+                    _spriteBatch.DrawString(font, "" + item.ItemName + " +" + itemMana + " Mana", new Vector2(770, invY), Color.White);
+                    invY += 20;
+                    itemMana += 5;
+                }
             }
             main.Draw(_spriteBatch);
             _spriteBatch.End();
