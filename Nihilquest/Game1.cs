@@ -20,6 +20,7 @@ namespace Nihilquest
         Texture2D obstTexture;
         Texture2D swordTexture;
         Texture2D manaTexture;
+        Texture2D heartTexture;
 
         private int gridSize = 10;
         private int tileSize = 64;
@@ -69,6 +70,7 @@ namespace Nihilquest
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
             swordTexture = this.Content.Load<Texture2D>("weapon_knife");
             manaTexture = this.Content.Load<Texture2D>("flask_big_blue");
+            heartTexture = this.Content.Load<Texture2D>("ui_heart_full");
             font = Content.Load<SpriteFont>("UIfont");
             main.LoadContent(Content);
 
@@ -190,7 +192,8 @@ namespace Nihilquest
                 }
             }
             _spriteBatch.DrawString(font, "Actions:", new Vector2(670, 10), Color.White);
-            _spriteBatch.DrawString(font, "HP: " + P1.Hp, new Vector2(670, 30), Color.White);
+            _spriteBatch.Draw(heartTexture, new Vector2(670, 30), Color.White);
+            _spriteBatch.DrawString(font, "" + P1.Hp, new Vector2(690, 30), Color.White);
             _spriteBatch.DrawString(font, "Mana: " + P1.Mana, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "DMG: " + P1.Dmg, new Vector2(670, 70), Color.White);
             _spriteBatch.DrawString(font, "range: " + P1.Range, new Vector2(670, 90), Color.White);
