@@ -31,7 +31,7 @@ namespace Nihilquest
         {
             if(item.ItemName == "butterknife")
             {
-                if (item.AddDmg != null)
+                if (item.AddDmg != 0)
                 {
                     Dmg += item.AddDmg;
                 }
@@ -39,7 +39,7 @@ namespace Nihilquest
 
             if (item.ItemName == "manaflask")
             {
-                if (item.AddMana != null)
+                if (item.AddMana != 0)
                 {
                     Mana += item.AddMana;
                 }
@@ -58,6 +58,14 @@ namespace Nihilquest
                 }
             }
             return checkItem;
+        }
+        public String ShowInventory()
+        {
+            foreach (Item items in Inventory)
+            {
+                return items.ItemName;
+            }
+            return null;
         }
     }
 }
