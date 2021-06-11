@@ -17,8 +17,7 @@ namespace Nihilquest
         }
         public bool isDead()
         {
-
-            return Hp == 0 ? true : false;
+            return Hp <= 0 ? true : false;
         }
     }
 }

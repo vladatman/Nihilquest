@@ -34,7 +34,7 @@ namespace Nihilquest
         private Player P1 = new Player("Player",0,0);
 
         private List<Enemy> Enemies = new List<Enemy>();
-        private Enemy E = new Enemy("mob1", 9, 5);
+        private Enemy E = new Enemy("mob1", 4, 3);
 
 
         private Item sword = new Item("butterknife", 5, 0);
@@ -115,7 +115,6 @@ namespace Nihilquest
             }
             //player model rendering
             _spriteBatch.Draw(playerTexture, tileMap[P1.PosX, P1.PosY].Rectangle, Color.White);
-            System.Diagnostics.Debug.WriteLine(Enemies.Count);
             for (int o = 5; o < gridSize; ++o)
             {
                 createObstacle(o,4);
@@ -203,6 +202,7 @@ namespace Nihilquest
                 _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
                 invY += 20;
             }
+
             main.Draw(_spriteBatch);
             _spriteBatch.End();
 
@@ -217,13 +217,15 @@ namespace Nihilquest
         {
             foreach (Enemy e in enemies)
             {
-          
+
                 _spriteBatch.Draw(enemyTexture, tileMap[e.PosX, e.PosY].Rectangle, Color.White);
                 _spriteBatch.DrawString(font, "HP:"+e.Hp, new Vector2(tileMap[e.PosX, e.PosY].Rectangle.X, tileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
                 tileMap[e.PosX, e.PosY].Character = e;
-                tileMap[e.PosX, E.PosY].IsLegal = false;
+                tileMap[e.PosX, e.PosY].IsLegal = false;
             }
 
+
         }
+
     }
 }
