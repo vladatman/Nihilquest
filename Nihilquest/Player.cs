@@ -59,6 +59,7 @@ namespace Nihilquest
             }
             return checkItem;
         }
+        // Shows the inventory in string format on UI
         public String ShowInventory()
         {
             foreach (Item items in Inventory)
