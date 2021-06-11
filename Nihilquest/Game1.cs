@@ -195,6 +195,7 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "DMG: " + P1.Dmg, new Vector2(670, 70), Color.White);
             _spriteBatch.DrawString(font, "range: " + P1.Range, new Vector2(670, 90), Color.White);
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
+            // Inventory
             _spriteBatch.DrawString(font, "" + P1.ShowInventory(), new Vector2(770, 30), Color.White);
 
             main.Draw(_spriteBatch);

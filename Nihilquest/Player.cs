@@ -31,7 +31,7 @@ namespace Nihilquest
         {
             if(item.ItemName == "butterknife")
             {
-                if (item.AddDmg != 0)
+                if (item.AddDmg != 0) // 0
                 {
                     Dmg += item.AddDmg;
                 }
@@ -39,7 +39,7 @@ namespace Nihilquest
 
             if (item.ItemName == "manaflask")
             {
-                if (item.AddMana != 0)
+                if (item.AddMana != 0) // 0
                 {
                     Mana += item.AddMana;
                 }
