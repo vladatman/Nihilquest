@@ -196,8 +196,13 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "range: " + P1.Range, new Vector2(670, 90), Color.White);
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
             // Inventory
-            _spriteBatch.DrawString(font, "" + P1.ShowInventory(), new Vector2(770, 30), Color.White);
-
+            int invY = 30;
+            foreach (Item item in P1.Inventory)
+            {
+               
+                _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
+                invY += 20;
+            }
             main.Draw(_spriteBatch);
             _spriteBatch.End();
 
