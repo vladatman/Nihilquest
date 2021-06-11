@@ -14,7 +14,7 @@ namespace Nihilquest
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D tileTexture;
+        Texture2D[] tileTexture = new Texture2D[8];
         Texture2D playerTexture;
         Texture2D enemyTexture;
         Texture2D obstTexture;
@@ -32,7 +32,7 @@ namespace Nihilquest
 
         private bool playerTurn = true;
 
-        private Player P1 = new Player("Player",0,0);
+        private Player P1 = new Player("Player",1,1);
 
         private List<Enemy> Enemies = new List<Enemy>();
         private Enemy E = new Enemy("mob1", 4, 3);
@@ -40,9 +40,7 @@ namespace Nihilquest
 
         private Item sword = new Item("butterknife", 5, 0);
         private Item mana = new Item("manaflask", 0, 5);
-
         private Cell[,] tileMap;
-
         private SpriteFont font;
         public Game1()
         {
@@ -63,8 +61,16 @@ namespace Nihilquest
 
         protected override void LoadContent()
         {
+            
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            tileTexture = this.Content.Load<Texture2D>("floor_1");
+            tileTexture[0] = this.Content.Load<Texture2D>("floor_1");
+            tileTexture[1] = this.Content.Load<Texture2D>("floor_2");
+            tileTexture[2] = this.Content.Load<Texture2D>("floor_3");
+            tileTexture[3] = this.Content.Load<Texture2D>("floor_4");
+            tileTexture[4] = this.Content.Load<Texture2D>("floor_5");
+            tileTexture[5] = this.Content.Load<Texture2D>("floor_6");
+            tileTexture[6] = this.Content.Load<Texture2D>("floor_7");
+            tileTexture[7] = this.Content.Load<Texture2D>("floor_8");
             playerTexture = this.Content.Load<Texture2D>("knight_f_run_anim_f0");
             enemyTexture = this.Content.Load<Texture2D>("imp_idle_anim_f0");
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
@@ -110,17 +116,21 @@ namespace Nihilquest
                 for (int j = 0; j < gridSize; ++j)
                 {
                     //tilemap rendering
+                    Random rnd = new Random();
                     Rectangle rectangle = new Rectangle(i * tileSize, j * tileSize, tileSize, tileSize);
                     tileMap[i, j] = new Cell(rectangle,true);
-                    _spriteBatch.Draw(tileTexture, tileMap[i, j].Rectangle, Color.White);
+                    _spriteBatch.Draw(tileTexture[0], tileMap[i, j].Rectangle, Color.White);
                 }
             }
             //player model rendering
             _spriteBatch.Draw(playerTexture, tileMap[P1.PosX, P1.PosY].Rectangle, Color.White);
-            for (int o = 5; o < gridSize; ++o)
+            for (int o = 0; o < gridSize; ++o)
             {
-                createObstacle(o,4);
-                createObstacle(o,6);
+                createObstacle(o,0);
+                createObstacle(o, gridSize-1);
+                createObstacle(0,o);
+                createObstacle(gridSize-1, o);
+
             }
             foreach (Enemy e in Enemies)
             {
@@ -164,7 +174,10 @@ namespace Nihilquest
                         //hover highlight
                         if (tileMap[i, j].Rectangle.Contains(mouseX, mouseY))
                         {
-                            _spriteBatch.Draw(tileTexture, tileMap[i, j].Rectangle,null, Color.Blue * 0.5f);
+                            if (tileMap[i, j].IsLegal)
+                            {
+                                _spriteBatch.Draw(tileTexture[0], tileMap[i, j].Rectangle, null, Color.Blue * 0.5f);
+                            }
                             //mouseclick movement
                             if (mouseState.LeftButton == ButtonState.Pressed && tileMap[i, j].IsLegal)
                             {
