@@ -22,8 +22,10 @@ namespace Nihilquest
         Texture2D manaTexture;
         Texture2D heartTexture;
 
-        private int gridSize = 10;
-        private int tileSize = 64;
+        private Room r = new Room();
+        private Room r2 = new Room();
+        private Player P = new Player("Wairen",5,5);
+        private Room[,] roomMap;
 
         public static int windowWidth = 960;
         public static int windowHeight = 640;
@@ -31,22 +33,13 @@ namespace Nihilquest
         MainMenu main = new MainMenu();
 
         private bool playerTurn = true;
-
-        private Player P1 = new Player("Player",1,1);
-
-        private List<Enemy> Enemies = new List<Enemy>();
-        private Enemy E = new Enemy("mob1", 4, 3);
-
-
-        private Item sword = new Item("butterknife", 5, 0);
-        private Item mana = new Item("manaflask", 0, 5);
-        private Cell[,] tileMap;
         private SpriteFont font;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Enemies.Add(E);
+            r.generateTileMap();
+            r.createWalls();
             IsMouseVisible = true;
         }
 
@@ -61,7 +54,7 @@ namespace Nihilquest
 
         protected override void LoadContent()
         {
-            
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             tileTexture[0] = this.Content.Load<Texture2D>("floor_1");
             tileTexture[1] = this.Content.Load<Texture2D>("floor_2");
@@ -103,25 +96,62 @@ namespace Nihilquest
               BlendState.AlphaBlend,
               SamplerState.PointClamp,
               null, null, null, null);
-
-            
-
-            tileMap = new Cell[gridSize, gridSize];
             MouseState mouseState = Mouse.GetState();
-
             int mouseX = mouseState.X;
             int mouseY = mouseState.Y;
-            for (int i = 0; i < gridSize; ++i)
+
+            for (int i = 0; i < r.GridSize; ++i)
             {
-                for (int j = 0; j < gridSize; ++j)
+                for (int j = 0; j < r.GridSize; ++j)
                 {
                     //tilemap rendering
-                    Random rnd = new Random();
-                    Rectangle rectangle = new Rectangle(i * tileSize, j * tileSize, tileSize, tileSize);
-                    tileMap[i, j] = new Cell(rectangle,true);
-                    _spriteBatch.Draw(tileTexture[0], tileMap[i, j].Rectangle, Color.White);
+                    if (r.TileMap[i, j].IsWall)
+                    {
+                        _spriteBatch.Draw(obstTexture, r.TileMap[i, j].Rectangle, Color.White);
+                    }
+                    else {
+                        _spriteBatch.Draw(tileTexture[0], r.TileMap[i, j].Rectangle, Color.White);
+                    }
+                    if (playerTurn)
+                    {
+                        //hover highlight
+                        if (r.TileMap[i, j].Rectangle.Contains(mouseX, mouseY))
+                        {
+                            if (r.TileMap[i, j].IsLegal)
+                            {
+                                _spriteBatch.Draw(tileTexture[0], r.TileMap[i, j].Rectangle, null, Color.Blue * 0.5f);
+                            }
+                            //mouseclick movement
+                            if (mouseState.LeftButton == ButtonState.Pressed && r.TileMap[i, j].IsLegal)
+                            {
+                                r.TileMap[P.PosX, P.PosY].Character = null;
+                                P.PosX = i;
+                                P.PosY = j;
+                                r.TileMap[P.PosX, P.PosY].Character = P;
+                                playerTurn = false;
+                                //pickup item
+                                if (r.TileMap[i, j].hasItem())
+                                {
+                                    P.pickUpItem(r.TileMap[i, j].Item);
+                                }
+
+                            }
+                            //attack enemy
+                            else if (mouseState.LeftButton == ButtonState.Pressed && r.TileMap[i, j].hasCharacter())
+                            {
+                                P.Attack(r.TileMap[i, j].Character);
+                                playerTurn = false;
+                            }
+                        }
+                    }
                 }
             }
+            _spriteBatch.Draw(playerTexture, r.TileMap[P.PosX, P.PosY].Rectangle, Color.White);
+
+            main.Draw(_spriteBatch);
+            _spriteBatch.End();
+            base.Draw(gameTime);
+            /*
             //player model rendering
             _spriteBatch.Draw(playerTexture, tileMap[P1.PosX, P1.PosY].Rectangle, Color.White);
             for (int o = 0; o < gridSize; ++o)
@@ -132,19 +162,9 @@ namespace Nihilquest
                 createObstacle(gridSize-1, o);
 
             }
-            foreach (Enemy e in Enemies)
-            {
-                if (!e.isDead())
-                {
-                    createEnemy(Enemies);
-                }
-                else
-                {
-                   
-                    tileMap[e.PosX, e.PosY].Character = null;
-                    tileMap[e.PosX, e.PosY].IsLegal = true;
-                }
-            }
+            createEnemy("mob1",5,6);
+            createEnemy("mob1", 5, 7);
+            drawEnemy();
             //item drawing
             if (!P1.isInInventory(sword))
             {
@@ -230,29 +250,36 @@ namespace Nihilquest
                 }
             }
 
-            main.Draw(_spriteBatch);
-            _spriteBatch.End();
 
-            base.Draw(gameTime);
         }
         public void createObstacle(int posX,int posY)
         {
             _spriteBatch.Draw(obstTexture, tileMap[posX, posY].Rectangle, Color.White);
             tileMap[posX, posY].IsLegal = false;
         }
-        private void createEnemy(List<Enemy> enemies)
+        private void drawEnemy()
         {
-            foreach (Enemy e in enemies)
+            foreach (Enemy e in Enemies)
             {
-
-                _spriteBatch.Draw(enemyTexture, tileMap[e.PosX, e.PosY].Rectangle, Color.White);
-                _spriteBatch.DrawString(font, "HP:"+e.Hp, new Vector2(tileMap[e.PosX, e.PosY].Rectangle.X, tileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
-                tileMap[e.PosX, e.PosY].Character = e;
-                tileMap[e.PosX, e.PosY].IsLegal = false;
+                if (e.isDead())
+                {
+                    tileMap[e.PosX, e.PosY].Character = null;
+                    tileMap[e.PosX, e.PosY].IsLegal = true;
+                }
+                else
+                {
+                    _spriteBatch.Draw(enemyTexture, tileMap[e.PosX, e.PosY].Rectangle, Color.White);
+                    _spriteBatch.DrawString(font, "HP:" + e.Hp, new Vector2(tileMap[e.PosX, e.PosY].Rectangle.X, tileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
+                    tileMap[e.PosX, e.PosY].Character = e;
+                    tileMap[e.PosX, e.PosY].IsLegal = false;
+                }
             }
-
-
         }
-
+        private void createEnemy(string name,int posX,int posY)
+        {
+            Enemies.Add(new Enemy(name, posX, posY));
+        }
+              */
+        }
     }
 }

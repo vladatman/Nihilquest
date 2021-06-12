@@ -8,6 +8,7 @@ namespace Nihilquest
     {
         private Rectangle rectangle;
         private bool isLegal;
+        private bool isWall;
         private Character character;
         private Item item;
         public Cell(Rectangle rectangle, bool isLegal)
@@ -20,6 +21,7 @@ namespace Nihilquest
         public bool IsLegal { get => isLegal; set => isLegal = value; }
         public Character Character { get => character; set => character = value; }
         public Item Item { get => item; set => item = value; }
+        public bool IsWall { get => isWall; set => isWall = value; }
 
         public bool hasCharacter()
         {
