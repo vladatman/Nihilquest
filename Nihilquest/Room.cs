@@ -43,12 +43,37 @@ namespace Nihilquest
             {
                 tileMap[o, 0].IsLegal = false;
                 tileMap[o, 0].IsWall = true;
+
                 tileMap[0, o].IsLegal = false;
                 tileMap[0, o].IsWall = true;
+
                 tileMap[o, gridSize-1].IsLegal = false;
                 tileMap[o, gridSize - 1].IsWall = true;
+
                 tileMap[gridSize - 1, o].IsLegal = false;
                 tileMap[gridSize - 1, o].IsWall = true;
+            }
+
+        }
+        public void createDoors()
+        {
+            for (int o = 4; o <= 5; ++o)
+            {
+                tileMap[o, 0].IsLegal = true;
+                tileMap[o, 0].IsDoor = true;
+                tileMap[o, 0].IsWall = false;
+
+                tileMap[0, o].IsLegal = true;
+                tileMap[0, o].IsDoor = true;
+                tileMap[0, o].IsWall = false;
+
+                tileMap[o, 9].IsLegal = true;
+                tileMap[o, 9].IsDoor = true;
+                tileMap[o, 9].IsWall = false;
+
+                tileMap[9, o].IsLegal = true;
+                tileMap[9, o].IsDoor = true;
+                tileMap[9, o].IsWall = false;
             }
 
         }

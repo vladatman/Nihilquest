@@ -40,6 +40,7 @@ namespace Nihilquest
             Content.RootDirectory = "Content";
             r.generateTileMap();
             r.createWalls();
+            r.createDoors();
             IsMouseVisible = true;
         }
 
@@ -108,6 +109,9 @@ namespace Nihilquest
                     if (r.TileMap[i, j].IsWall)
                     {
                         _spriteBatch.Draw(obstTexture, r.TileMap[i, j].Rectangle, Color.White);
+                    }else if (r.TileMap[i, j].IsDoor)
+                    {
+                        _spriteBatch.Draw(tileTexture[1], r.TileMap[i, j].Rectangle, Color.White);
                     }
                     else {
                         _spriteBatch.Draw(tileTexture[0], r.TileMap[i, j].Rectangle, Color.White);
