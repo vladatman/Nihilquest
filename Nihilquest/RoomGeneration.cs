@@ -19,8 +19,8 @@ namespace Nihilquest
         public void generateRoom()
         {
             // Initial coordinates for spawning rooms
-            int x = 0;
-            int y = 0;
+            int x = 1;
+            int y = 1;
 
             Random rnd = new Random();
             // Last direction in which a room was generated
@@ -30,7 +30,7 @@ namespace Nihilquest
             level = new Room[MapSize, MapSize];
 
             int roomsGenerated = 0;
-            while (roomsGenerated <= 20)
+            while (roomsGenerated < 10)
             {
                 int value = rnd.Next(1, 5);
                 if (value != last)
@@ -38,21 +38,24 @@ namespace Nihilquest
                     switch (value)
                     {
                         case 1:
-                            if (y >= 1) y -= 1;
+                            if (y >= 1) { y -= 1; };
                             break;
                         case 2:
-                            x += 1;
+                            if (x < MapSize - 1) { x += 1; };
                             break;
                         case 3:
-                            y += 1;
+                            if (y < MapSize-1) { y += 1; };
                             break;
                         case 4:
-                            if (x >= 1) x -= 1;
+                            if (x >= 1) { x -= 1; };
                             break;
                     }
-                    level[x, y] = new Room();
-                    roomsGenerated++;
-                    last = value;
+                    if (level[x, y] == null)
+                    {
+                        level[x, y] = new Room();
+                        roomsGenerated++;
+                        last = value;
+                    }
                 }
             }
         }

@@ -7,8 +7,8 @@ namespace Nihilquest
 {
     class Room
     {
-        private List<Enemy> Enemies;
-        private List<Item> Items;
+        private List<Enemy> enemies;
+        private List<Item> items;
         private Cell[,] tileMap;
         private bool isStart;
         private bool isBoss;
@@ -25,10 +25,14 @@ namespace Nihilquest
         public bool IsStart { get => isStart; set => isStart = value; }
         public bool IsBoss { get => isBoss; set => isBoss = value; }
         public bool IsItem { get => isItem; set => isItem = value; }
+        internal List<Enemy> Enemies { get => enemies; set => enemies = value; }
+        internal List<Item> Items { get => items; set => items = value; }
 
         public Room()
         {
-            this.TileMap = new Cell[GridSize, GridSize];
+            TileMap = new Cell[GridSize, GridSize];
+            Enemies = new List<Enemy>();
+
         }
 
         public void generateTileMap()
@@ -65,18 +69,19 @@ namespace Nihilquest
         {
             for (int o = 4; o <= 5; ++o)
             {
+                //TOP
                 tileMap[o, 0].IsLegal = true;
                 tileMap[o, 0].IsDoor = true;
                 tileMap[o, 0].IsWall = false;
-
+                //LEFT
                 tileMap[0, o].IsLegal = true;
                 tileMap[0, o].IsDoor = true;
                 tileMap[0, o].IsWall = false;
-
+                //BOTTOM
                 tileMap[o, 9].IsLegal = true;
                 tileMap[o, 9].IsDoor = true;
                 tileMap[o, 9].IsWall = false;
-
+                //RIGHT
                 tileMap[9, o].IsLegal = true;
                 tileMap[9, o].IsDoor = true;
                 tileMap[9, o].IsWall = false;
