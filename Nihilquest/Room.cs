@@ -10,6 +10,9 @@ namespace Nihilquest
         private List<Enemy> Enemies;
         private List<Item> Items;
         private Cell[,] tileMap;
+        private bool isStart;
+        private bool isBoss;
+        private bool isItem;
 
         private Player player;
 
@@ -19,6 +22,9 @@ namespace Nihilquest
         internal Cell[,] TileMap { get => tileMap; set => tileMap = value; }
         public int GridSize { get => gridSize; set => gridSize = value; }
         internal Player Player { get => player; set => player = value; }
+        public bool IsStart { get => isStart; set => isStart = value; }
+        public bool IsBoss { get => isBoss; set => isBoss = value; }
+        public bool IsItem { get => isItem; set => isItem = value; }
 
         public Room()
         {
@@ -47,7 +53,7 @@ namespace Nihilquest
                 tileMap[0, o].IsLegal = false;
                 tileMap[0, o].IsWall = true;
 
-                tileMap[o, gridSize-1].IsLegal = false;
+                tileMap[o, gridSize - 1].IsLegal = false;
                 tileMap[o, gridSize - 1].IsWall = true;
 
                 tileMap[gridSize - 1, o].IsLegal = false;
