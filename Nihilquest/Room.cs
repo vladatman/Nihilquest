@@ -28,10 +28,12 @@ namespace Nihilquest
         internal List<Enemy> Enemies { get => enemies; set => enemies = value; }
         internal List<Item> Items { get => items; set => items = value; }
 
+
         public Room()
         {
-            TileMap = new Cell[GridSize, GridSize];
-            Enemies = new List<Enemy>();
+          TileMap = new Cell[GridSize, GridSize];
+          Enemies = new List<Enemy>();
+          items = new List<Item>();
 
         }
 

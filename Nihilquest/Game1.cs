@@ -18,8 +18,6 @@ namespace Nihilquest
         Texture2D playerTexture;
         Texture2D enemyTexture;
         Texture2D obstTexture;
-        Texture2D swordTexture;
-        Texture2D manaTexture;
         Texture2D heartTexture;
 
         private Player P = new Player("Wairen", 5, 5);
@@ -32,8 +30,8 @@ namespace Nihilquest
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
-        private Item mana = new Item("Mana flask", 0, 5);
-        private Item sword = new Item("Sword", 5, 0);
+        private Item mana = new Item("Mana flask", 1, 2);
+        private Item sword = new Item("Sword", 1,1);
 
         MainMenu main = new MainMenu();
 
@@ -57,6 +55,10 @@ namespace Nihilquest
                     r.createDoors();
                 }
             }
+            sword.AddDmg = 5;
+            mana.AddMana = 5;
+            createItem(sword);
+            createItem(mana);
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
             roomMap[playerRoomX, playerRoomY].Player = P;
@@ -87,8 +89,8 @@ namespace Nihilquest
             playerTexture = this.Content.Load<Texture2D>("knight_f_run_anim_f0");
             enemyTexture = this.Content.Load<Texture2D>("imp_idle_anim_f0");
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
-            swordTexture = this.Content.Load<Texture2D>("weapon_knife");
-            manaTexture = this.Content.Load<Texture2D>("flask_big_blue");
+            sword.Texture = this.Content.Load<Texture2D>("weapon_knife");
+            mana.Texture = this.Content.Load<Texture2D>("flask_big_blue");
             heartTexture = this.Content.Load<Texture2D>("ui_heart_full");
             font = Content.Load<SpriteFont>("UIfont");
             main.LoadContent(Content);
@@ -126,6 +128,7 @@ namespace Nihilquest
                 {
                     for (int j = 0; j < roomMap[playerRoomX, playerRoomY].GridSize; ++j)
                     {
+                        _spriteBatch.Draw(playerTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Rectangle, Color.White);
                         //tilemap rendering
                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsWall)
                         {
@@ -133,7 +136,7 @@ namespace Nihilquest
                         }
                         else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
                         {
-                            _spriteBatch.Draw(tileTexture[1], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
+                            _spriteBatch.Draw(tileTexture[4], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
                         }
                         else
                         {
@@ -173,8 +176,9 @@ namespace Nihilquest
                                                     if (roomMap[playerRoomX, playerRoomY + 1] != null)
                                                     {
                                                         roomMap[playerRoomX, playerRoomY + 1].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                        roomMap[playerRoomX, playerRoomY].Player = null;
                                                         playerRoomY++;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosX = 4;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosY = 8;
                                                         System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
@@ -187,8 +191,9 @@ namespace Nihilquest
                                                     if (roomMap[playerRoomX - 1, playerRoomY] != null)
                                                     {
                                                         roomMap[playerRoomX - 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                        roomMap[playerRoomX, playerRoomY].Player = null;
                                                         playerRoomX--;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosX = 8;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosY = 4;
                                                         System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
@@ -201,8 +206,9 @@ namespace Nihilquest
                                                     if (roomMap[playerRoomX, playerRoomY - 1] != null)
                                                     {
                                                         roomMap[playerRoomX, playerRoomY - 1].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                        roomMap[playerRoomX, playerRoomY].Player = null;
                                                         playerRoomY--;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosX = 4;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosY = 1;
                                                         System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
@@ -216,7 +222,8 @@ namespace Nihilquest
                                                     {
                                                         roomMap[playerRoomX + 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
                                                         playerRoomX++;
-                                                        roomMap[playerRoomX, playerRoomY].Player = null;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosX = 1;
+                                                        roomMap[playerRoomX, playerRoomY].Player.PosY = 4;
                                                         System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
@@ -234,7 +241,6 @@ namespace Nihilquest
                         }
                     }
                 }
-                _spriteBatch.Draw(playerTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Rectangle, Color.White);
                 //enemy drawing
                 foreach (Enemy e in roomMap[playerRoomX, playerRoomY].Enemies)
                 {
@@ -251,23 +257,17 @@ namespace Nihilquest
                     }
                 }
                 //item drawing
-                if (!roomMap[playerRoomX, playerRoomY].Player.isInInventory(sword))
+                foreach (Item i in roomMap[playerRoomX, playerRoomY].Items)
                 {
-                    _spriteBatch.Draw(swordTexture, roomMap[playerRoomX, playerRoomY].TileMap[2, 2].Rectangle, Color.White);
-                    roomMap[playerRoomX, playerRoomY].TileMap[2, 2].Item = sword;
-                }
-                else
-                {
-                    roomMap[playerRoomX, playerRoomY].TileMap[2, 2].Item = null;
-                }
-                if (!roomMap[playerRoomX, playerRoomY].Player.isInInventory(mana))
-                {
-                    _spriteBatch.Draw(manaTexture, roomMap[playerRoomX, playerRoomY].TileMap[4, 4].Rectangle, Color.White);
-                    roomMap[playerRoomX, playerRoomY].TileMap[4, 4].Item = mana;
-                }
-                else
-                {
-                    roomMap[playerRoomX, playerRoomY].TileMap[4, 4].Item = null;
+                    if (!roomMap[playerRoomX, playerRoomY].Player.isInInventory(i))
+                    {
+                        _spriteBatch.Draw(i.Texture, roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Rectangle, Color.White);
+                    }
+                    else
+                    {
+                        roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Item = null;
+                    }
+
                 }
             }
 
@@ -300,6 +300,11 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Enemies.Add(e);
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = e;
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = false;
+        }
+        private void createItem(Item i)
+        {
+            roomMap[playerRoomX, playerRoomY].Items.Add(i);
+            roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Item = i;
         }
     }
 }
