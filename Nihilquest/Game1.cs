@@ -32,8 +32,8 @@ namespace Nihilquest
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
-        private Item mana = new Item("Mana flask",0,5);
-        private Item sword = new Item("Sword", 5,0);
+        private Item mana = new Item("Mana flask", 0, 5);
+        private Item sword = new Item("Sword", 5, 0);
 
         MainMenu main = new MainMenu();
 
@@ -43,14 +43,13 @@ namespace Nihilquest
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            playerRoomX=1;
-            playerRoomY=1;
+            playerRoomX = 1;
+            playerRoomY = 1;
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
             foreach (Room r in roomMap)
             {
-                //System.Diagnostics.Debug.WriteLine(r == null);
                 if (r != null)
                 {
                     r.generateTileMap();
@@ -58,6 +57,8 @@ namespace Nihilquest
                     r.createDoors();
                 }
             }
+            createEnemy("mob1", 5, 6);
+            createEnemy("mob1", 5, 7);
             roomMap[playerRoomX, playerRoomY].Player = P;
             IsMouseVisible = true;
         }
@@ -148,92 +149,107 @@ namespace Nihilquest
                                     _spriteBatch.Draw(tileTexture[0], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, null, Color.Blue * 0.5f);
                                 }
                                 //mouseclick movement
-                                if (mouseState.LeftButton == ButtonState.Pressed && roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal)
+                                if (mouseState.LeftButton == ButtonState.Pressed)
                                 {
-                                    roomMap[playerRoomX, playerRoomY].TileMap[P.PosX, P.PosY].Character = null;
-                                    roomMap[playerRoomX, playerRoomY].Player.PosX = i;
-                                    roomMap[playerRoomX, playerRoomY].Player.PosY = j;
-                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = roomMap[playerRoomX, playerRoomY].Player;
-                                    playerTurn = false;
-                                    //pickup item
-                                    if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
+                                    if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal)
                                     {
-                                        P.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
+                                        roomMap[playerRoomX, playerRoomY].TileMap[P.PosX, P.PosY].Character = null;
+                                        roomMap[playerRoomX, playerRoomY].Player.PosX = i;
+                                        roomMap[playerRoomX, playerRoomY].Player.PosY = j;
+                                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = roomMap[playerRoomX, playerRoomY].Player;
+                                        playerTurn = false;
+                                        //pickup item
+                                        if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
+                                        {
+                                            roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
+                                        }
+                                        if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
+                                        {
+                                            //TOP
+                                            if ((i == 4 || i == 5) && j == 0)
+                                            {
+                                                if (playerRoomY + 1 < rg.MapSize - 1)
+                                                {
+                                                    if (roomMap[playerRoomX, playerRoomY + 1] != null)
+                                                    {
+                                                        roomMap[playerRoomX, playerRoomY + 1].Player = roomMap[playerRoomX, playerRoomY].Player;
+                                                        roomMap[playerRoomX, playerRoomY].Player = null;
+                                                        playerRoomY++;
+                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
+                                                    }
+                                                }
+                                            }
+                                            //LEFT
+                                            if ((j == 4 || j == 5) && i == 0)
+                                            {
+                                                if (playerRoomX - 1 > 0)
+                                                {
+                                                    if (roomMap[playerRoomX - 1, playerRoomY] != null)
+                                                    {
+                                                        roomMap[playerRoomX - 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
+                                                        roomMap[playerRoomX, playerRoomY].Player = null;
+                                                        playerRoomX--;
+                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
+                                                    }
+                                                }
+                                            }
+                                            //BOTTOM
+                                            if ((i == 4 || i == 5) && j == 9)
+                                            {
+                                                if (playerRoomY - 1 > 0)
+                                                {
+                                                    if (roomMap[playerRoomX, playerRoomY - 1] != null)
+                                                    {
+                                                        roomMap[playerRoomX, playerRoomY - 1].Player = roomMap[playerRoomX, playerRoomY].Player;
+                                                        roomMap[playerRoomX, playerRoomY].Player = null;
+                                                        playerRoomY--;
+                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
+                                                    }
+                                                }
+                                            }
+                                            //RIGHT
+                                            if ((j == 4 || j == 5) && i == 9)
+                                            {
+                                                if (playerRoomX + 1 < rg.MapSize - 1)
+                                                {
+                                                    if (roomMap[playerRoomX + 1, playerRoomY] != null)
+                                                    {
+                                                        roomMap[playerRoomX + 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
+                                                        playerRoomX++;
+                                                        roomMap[playerRoomX, playerRoomY].Player = null;
+                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                                    if (mouseState.LeftButton == ButtonState.Pressed && roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
+                                    //attack enemy
+                                    else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
                                     {
-                                        //TOP
-                                        if ((i == 4 || i == 5) && j == 0)
-                                        {
-                                            if (playerRoomY + 1 < rg.MapSize - 1)
-                                            {
-                                                if (roomMap[playerRoomX, playerRoomY + 1] != null)
-                                                {
-                                                    roomMap[playerRoomX, playerRoomY + 1].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                    roomMap[playerRoomX, playerRoomY].Player = null;
-                                                    playerRoomY++;
-                                                    System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
-                                                }
-                                            }
-                                        }
-                                        //LEFT
-                                        if ((j == 4 || j == 5) && i == 0)
-                                        {
-                                            if (playerRoomX - 1 > 0)
-                                            {
-                                                if (roomMap[playerRoomX - 1, playerRoomY] != null)
-                                                {
-                                                    roomMap[playerRoomX - 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                    roomMap[playerRoomX, playerRoomY].Player = null;
-                                                    playerRoomX--;
-                                                    System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
-                                                }
-                                            }
-                                        }
-                                        //BOTTOM
-                                        if ((i == 4 || i == 5) && j == 9)
-                                        {
-                                            if (playerRoomY - 1 > 0)
-                                            {
-                                                if (roomMap[playerRoomX, playerRoomY - 1] != null)
-                                                {
-                                                    roomMap[playerRoomX, playerRoomY - 1].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                    roomMap[playerRoomX, playerRoomY].Player = null;
-                                                    playerRoomY--;
-                                                    System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
-                                                }
-                                            }
-                                        }
-                                        //RIGHT
-                                        if ((j == 4 || j == 5) && i == 9)
-                                        {
-                                            if (playerRoomX + 1 < rg.MapSize - 1)
-                                            {
-                                                if (roomMap[playerRoomX + 1, playerRoomY] != null)
-                                                {
-                                                    roomMap[playerRoomX + 1, playerRoomY].Player = roomMap[playerRoomX, playerRoomY].Player;
-                                                    playerRoomX++;
-                                                    roomMap[playerRoomX, playerRoomY].Player = null;
-                                                    System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
-                                                }
-                                            }
-                                        }
+                                        roomMap[playerRoomX, playerRoomY].Player.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
+                                        playerTurn = false;
                                     }
-                                }
-                                //attack enemy
-                                else if (mouseState.LeftButton == ButtonState.Pressed && roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
-                                {
-                                    P.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
-                                    playerTurn = false;
                                 }
                             }
                         }
                     }
                 }
-                _spriteBatch.Draw(playerTexture, roomMap[playerRoomX, playerRoomY].TileMap[P.PosX, P.PosY].Rectangle, Color.White);
-                createEnemy("mob1", 5, 6);
-                createEnemy("mob1", 5, 7);
-                drawEnemy();
+                _spriteBatch.Draw(playerTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Rectangle, Color.White);
+                //enemy drawing
+                foreach (Enemy e in roomMap[playerRoomX, playerRoomY].Enemies)
+                {
+                    if (e.isDead())
+                    {
+                        roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = null;
+                        roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = true;
+                    }
+                    else
+                    {
+                        _spriteBatch.Draw(enemyTexture, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle, Color.White);
+                        _spriteBatch.DrawString(font, "HP:" + e.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
+
+                    }
+                }
                 //item drawing
                 if (!roomMap[playerRoomX, playerRoomY].Player.isInInventory(sword))
                 {
@@ -264,54 +280,27 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
             // Inventory
             int invY = 30;
-            int itemDmg = 5;
-            int itemMana = 5;
             foreach (Item item in roomMap[playerRoomX, playerRoomY].Player.Inventory)
             {
-               if(item.ItemName == "butterknife")
-                {
-                    _spriteBatch.DrawString(font, "" + item.ItemName + " +" + itemDmg + " DMG", new Vector2(770, invY), Color.White);
+                    _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
                     invY += 20;
-                    itemDmg += 5;
-                }
-               if(item.ItemName == "manaflask")
-                {
-                    _spriteBatch.DrawString(font, "" + item.ItemName + " +" + itemMana + " Mana", new Vector2(770, invY), Color.White);
-                    invY += 20;
-                    itemMana += 5;
-                }
             }
             main.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        public void createObstacle(int posX,int posY)
+        public void createObstacle(int posX, int posY)
         {
             _spriteBatch.Draw(obstTexture, roomMap[playerRoomX, playerRoomY].TileMap[posX, posY].Rectangle, Color.White);
             roomMap[playerRoomX, playerRoomY].TileMap[posX, posY].IsLegal = false;
         }
-        private void drawEnemy()
+        private void createEnemy(string name, int posX, int posY)
         {
-            foreach (Enemy e in roomMap[playerRoomX, playerRoomY].Enemies)
-            {
-                if (e.isDead())
-                {
-                    roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = null;
-                    roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = true;
-                }
-                else
-                {
-                    _spriteBatch.Draw(enemyTexture, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle, Color.White);
-                    _spriteBatch.DrawString(font, "HP:" + e.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
-                    roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = e;
-                    roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = false;
-                }
-            }
-        }
-        private void createEnemy(string name,int posX,int posY)
-        {
-            roomMap[playerRoomX, playerRoomY].Enemies.Add(new Enemy(name, posX, posY));
-        }
-
+            Enemy e = new Enemy(name, posX, posY);
+            roomMap[playerRoomX, playerRoomY].Enemies.Add(e);
+            roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = e;
+            roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = false;
         }
     }
+}
+

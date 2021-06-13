@@ -27,7 +27,6 @@ namespace Nihilquest
             
             if (charA.hp > 0 && Math.Abs(charA.PosX - PosX) <= Range && Math.Abs(charA.PosY - PosY) <= Range)
             {
-                
                charA.Hp -= dmg;
             }
         }
