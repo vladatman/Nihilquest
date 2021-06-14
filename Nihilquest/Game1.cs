@@ -19,6 +19,9 @@ namespace Nihilquest
         Texture2D enemyTexture;
         Texture2D obstTexture;
         Texture2D heartTexture;
+        Texture2D manaUITexture;
+        Texture2D damageUITexture;
+        Texture2D rangeUITexture;
 
         private Player P = new Player("Wairen", 5, 5);
         private Room[,] roomMap;
@@ -92,6 +95,9 @@ namespace Nihilquest
             sword.Texture = this.Content.Load<Texture2D>("weapon_knife");
             mana.Texture = this.Content.Load<Texture2D>("flask_big_blue");
             heartTexture = this.Content.Load<Texture2D>("ui_heart_full");
+            manaUITexture = this.Content.Load<Texture2D>("ui_flask_blue");
+            damageUITexture = this.Content.Load<Texture2D>("ui_damage");
+            rangeUITexture = this.Content.Load<Texture2D>("ui_range");
             font = Content.Load<SpriteFont>("UIfont");
             main.LoadContent(Content);
 
@@ -271,12 +277,15 @@ namespace Nihilquest
                 }
             }
 
-            _spriteBatch.DrawString(font, "Actions:", new Vector2(670, 10), Color.White);
+            _spriteBatch.DrawString(font, "Stats:", new Vector2(670, 10), Color.White);
             _spriteBatch.Draw(heartTexture, new Vector2(670, 30), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Hp, new Vector2(690, 30), Color.White);
-            _spriteBatch.DrawString(font, "Mana: " + roomMap[playerRoomX, playerRoomY].Player.Mana, new Vector2(670, 50), Color.White);
-            _spriteBatch.DrawString(font, "DMG: " + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(670, 70), Color.White);
-            _spriteBatch.DrawString(font, "range: " + roomMap[playerRoomX, playerRoomY].Player.Range, new Vector2(670, 90), Color.White);
+            _spriteBatch.Draw(manaUITexture, new Vector2(670, 50), Color.White);
+            _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Mana, new Vector2(690, 50), Color.White);
+            _spriteBatch.Draw(damageUITexture, new Vector2(672, 70), Color.White);
+            _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(690, 70), Color.White);
+            _spriteBatch.Draw(rangeUITexture, new Vector2(670, 90), Color.White);
+            _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Range, new Vector2(690, 90), Color.White);
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
             // Inventory
             int invY = 30;
