@@ -285,18 +285,18 @@ namespace Nihilquest
                     }
                 }
                 //enemy drawing
-                foreach (Enemy e in roomMap[playerRoomX, playerRoomY].Enemies)
+                for(int e = 0;e< roomMap[playerRoomX, playerRoomY].Enemies.Count;e++)
                 {
-                    if (e.isDead())
+                    if (roomMap[playerRoomX, playerRoomY].Enemies[e].isDead())
                     {
-                        roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = null;
-                        roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = true;
-                        roomMap[playerRoomX, playerRoomY].Enemies.Remove(e);
+                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Character = null;
+                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].IsLegal = true;
+                        roomMap[playerRoomX, playerRoomY].Enemies.Remove(roomMap[playerRoomX, playerRoomY].Enemies[e]);
                     }
                     else
                     {
-                        _spriteBatch.Draw(enemyTexture, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle, Color.White);
-                        _spriteBatch.DrawString(font, "HP:" + e.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Rectangle.Y), Color.White);
+                        _spriteBatch.Draw(enemyTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle, Color.White);
+                        _spriteBatch.DrawString(font, "HP:" + roomMap[playerRoomX, playerRoomY].Enemies[e].Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle.Y), Color.White);
 
                     }
                 }
