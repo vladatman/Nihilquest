@@ -160,7 +160,7 @@ namespace Nihilquest
                                 //mouseclick movement
                                 if (mouseState.LeftButton == ButtonState.Pressed)
                                 {
-                                    if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal)
+                                    if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
                                         roomMap[playerRoomX, playerRoomY].TileMap[P.PosX, P.PosY].Character = null;
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
