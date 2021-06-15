@@ -275,11 +275,12 @@ namespace Nihilquest
 
                             while(eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
-                                if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
-                                roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
-                                eIndex++;
+                                if (Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                {
+                                    roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
+                                    eIndex++;
+                                }
                             }
-                            //TODO enemy attack
                         }
                     }
                 }
@@ -290,6 +291,7 @@ namespace Nihilquest
                     {
                         roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = null;
                         roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = true;
+                        roomMap[playerRoomX, playerRoomY].Enemies.Remove(e);
                     }
                     else
                     {
