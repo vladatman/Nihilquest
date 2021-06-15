@@ -12,6 +12,7 @@ namespace Nihilquest
         public static int screenHeight;
         private Room[,] level;
         private int mapSize = 10;
+        private int roomsToGenerate = 10;
 
         public int MapSize { get => mapSize; set => mapSize = value; }
         internal Room[,] Level { get => level; set => level = value; }
@@ -50,7 +51,7 @@ namespace Nihilquest
 
 
             int roomsGenerated = 0;
-            while (roomsGenerated < 10)
+            while (roomsGenerated < roomsToGenerate)
             {
                 int value = rnd.Next(1, 5);
                 if (value != last)
