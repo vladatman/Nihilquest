@@ -33,8 +33,11 @@ namespace Nihilquest
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
-        private Item mana = new Item("Mana flask", 1, 2);
+        private Item mana = new Item("Mana flask", 1,2);
         private Item sword = new Item("Sword", 1,1);
+        private Item health = new Item("Health", 8,8);
+        private Item halfMana = new Item("Half Mana", 8,7);
+        private Item halfHealth = new Item("Half Health", 8,1);
 
         MainMenu main = new MainMenu();
 
@@ -59,9 +62,15 @@ namespace Nihilquest
                 }
             }
             sword.AddDmg = 5;
-            mana.AddMana = 5;
+            mana.AddMana = 10;
+            health.AddHealth = 10;
+            halfHealth.AddHealth = 5;
+            halfMana.AddMana = 5;
             createItem(sword);
             createItem(mana);
+            createItem(health);
+            createItem(halfHealth);
+            createItem(halfMana);
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
             roomMap[playerRoomX, playerRoomY].Player = P;
@@ -94,6 +103,9 @@ namespace Nihilquest
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
             sword.Texture = this.Content.Load<Texture2D>("weapon_knife");
             mana.Texture = this.Content.Load<Texture2D>("flask_big_blue");
+            health.Texture = this.Content.Load<Texture2D>("heart_full");
+            halfHealth.Texture = this.Content.Load<Texture2D>("heart_half");
+            halfMana.Texture = this.Content.Load<Texture2D>("small_flask_blue");
             heartTexture = this.Content.Load<Texture2D>("ui_heart_full");
             manaUITexture = this.Content.Load<Texture2D>("ui_flask_blue");
             damageUITexture = this.Content.Load<Texture2D>("ui_damage");
