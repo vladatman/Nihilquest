@@ -151,7 +151,7 @@ namespace Nihilquest
                         if (playerTurn)
                         {
                             //hover highlight
-                            if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY))
+                            if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                             {
                                 if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal)
                                 {
@@ -244,6 +244,12 @@ namespace Nihilquest
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+
+
+                            //TODO enemy attack
                         }
                     }
                 }
