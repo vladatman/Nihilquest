@@ -23,12 +23,14 @@ namespace Nihilquest
         Texture2D damageUITexture;
         Texture2D rangeUITexture;
 
-        private Player P = new Player("Wairen", 5, 5);
         private Room[,] roomMap;
         private RoomGeneration rg;
 
         private int playerRoomX;
         private int playerRoomY;
+
+        private int eIndex;
+
 
         public static int windowWidth = 960;
         public static int windowHeight = 640;
@@ -49,6 +51,7 @@ namespace Nihilquest
             Content.RootDirectory = "Content";
             playerRoomX = 1;
             playerRoomY = 1;
+            eIndex = 0;
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
@@ -73,7 +76,7 @@ namespace Nihilquest
             createItem(halfMana);
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
-            roomMap[playerRoomX, playerRoomY].Player = P;
+            roomMap[playerRoomX, playerRoomY].Player = new Player("Wairen", 5, 5);
             IsMouseVisible = true;
         }
 
@@ -162,6 +165,7 @@ namespace Nihilquest
                         }
                         if (playerTurn)
                         {
+                            eIndex = 0;
                             //hover highlight
                             if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                             {
@@ -174,7 +178,7 @@ namespace Nihilquest
                                 {
                                     if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
-                                        roomMap[playerRoomX, playerRoomY].TileMap[P.PosX, P.PosY].Character = null;
+                                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = null;
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
                                         roomMap[playerRoomX, playerRoomY].Player.PosY = j;
                                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = roomMap[playerRoomX, playerRoomY].Player;
@@ -260,7 +264,12 @@ namespace Nihilquest
                         else
                         {
 
-
+                            while(eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
+                            {
+                                if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
+                                eIndex++;
+                            }
                             //TODO enemy attack
                         }
                     }
