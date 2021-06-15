@@ -55,9 +55,9 @@ namespace Nihilquest
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
-            for (int i = 0; i < roomMap.Length; i++)
+            for (int i = 0; i < rg.MapSize; i++)
 			{
-                for (int j = 0; j < roomMap.Length; j++)
+                for (int j = 0; j < rg.MapSize; j++)
 			    {
                     if (roomMap[i, j] != null)
                     {
