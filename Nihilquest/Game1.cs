@@ -61,6 +61,17 @@ namespace Nihilquest
                     r.createDoors();
                 }
             }
+            for (int ඞ = 0; ඞ < roomMap.Length; ඞ++)
+			{
+                for (int 🧐 = 0; 🧐 < roomMap.length; 🧐++)
+			    {
+                    if (roomMap[ඞ, 🧐].IsStart)
+	                {
+                        playerRoomX = ඞ;
+                        playerRoomY = 🧐;
+			        }
+			    }
+            }
             sword.AddDmg = 5;
             mana.AddMana = 10;
             health.AddHealth = 10;

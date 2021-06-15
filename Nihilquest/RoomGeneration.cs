@@ -29,6 +29,26 @@ namespace Nihilquest
             // Amount of rooms to generate
             level = new Room[MapSize, MapSize];
 
+            // Generate random number for each special room
+            int mainRoom = rnd.Next(roomsToGenerate);
+            int endRoom = rnd.Next(roomsToGenerate);
+            int itemRoom = rnd.Next(roomsToGenerate);
+
+            while ((endRoom == mainRoom) || (endRoom == itemRoom))
+            {
+                endRoom = rnd.Next(roomsToGenerate);
+            }
+            while ((itemRoom == mainRoom) || (itemRoom == endRoom))
+            {
+                itemRoom = rnd.Next(roomsToGenerate);
+            }
+
+            // Check if a special room has already been generated
+            bool mainRoomFlag = false;
+            bool itemRoomFlag = false;
+            bool endRoomFlag = false;
+
+
             int roomsGenerated = 0;
             while (roomsGenerated < 10)
             {
@@ -52,9 +72,40 @@ namespace Nihilquest
                     }
                     if (level[x, y] == null)
                     {
-                        level[x, y] = new Room();
-                        roomsGenerated++;
-                        last = value;
+                        if ((roomsGenerated == mainRoom) && (mainRoomFlag == false))
+	                    {
+                            level[x, y] = new Room();
+                            level[x, y].IsStart = true;
+                            mainRoomFlag = true;
+                            roomsGenerated++;
+                            last = value;
+	                    }else
+                        {
+                            if ((roomsGenerated == itemRoom) && (itemRoomFlag == false))
+	                        {
+                                level[x, y] = new Room();
+                                level[x, y].IsItem = true;
+                                itemRoomFlag = true;
+                                roomsGenerated++;
+                                last = value;
+	                        }
+                            else
+                            {
+                                 if ((roomsGenerated == endRoom) && (endRoomFlag == false))
+	                            {
+                                    level[x, y] = new Room();
+                                    level[x, y].IsBoss = true;
+                                    endRoomFlag = true;
+                                    roomsGenerated++;
+                                    last = value;
+	                            }else
+	                            {
+                                    level[x, y] = new Room();
+                                    roomsGenerated++;
+                                    last = value;
+	                            }                           
+                            }
+                        }
                     }
                 }
             }
