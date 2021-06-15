@@ -31,6 +31,8 @@ namespace Nihilquest
         {
             Dmg += item.AddDmg;
             Mana += item.AddMana;
+            Hp += item.AddHealth;
+            ManaRegen += item.AddManaRegen;
 
             Inventory.Add(item);
         }
