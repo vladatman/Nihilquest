@@ -24,6 +24,7 @@ namespace Nihilquest
         Texture2D rangeUITexture;
         Texture2D itemRoom;
         Texture2D bossRoom;
+        Texture2D ladder;
 
         private Room[,] roomMap;
         private RoomGeneration rg;
@@ -31,6 +32,7 @@ namespace Nihilquest
 
         private int playerRoomX;
         private int playerRoomY;
+        private Player P = new Player("Wairen", 5, 5);
 
         private int eIndex;
 
@@ -72,11 +74,15 @@ namespace Nihilquest
                             playerRoomX = i;
                             playerRoomY = j;
                         }
+                        if (roomMap[i, j].IsBoss == true)
+                        {
+                            roomMap[i, j].TileMap[5, 5].IsExit = true;
+                        }
+
                     }
 
 			    }
             }
-
             sword.AddDmg = 5;
             mana.AddMana = 10;
             health.AddHealth = 10;
@@ -91,7 +97,7 @@ namespace Nihilquest
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
 
-            roomMap[playerRoomX, playerRoomY].Player = new Player("Wairen", 5, 5);
+            roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize,rg.MapSize];
             IsMouseVisible = true;
         }
@@ -131,6 +137,7 @@ namespace Nihilquest
             rangeUITexture = this.Content.Load<Texture2D>("ui_range");
             bossRoom = this.Content.Load<Texture2D>("skull");
             itemRoom = this.Content.Load<Texture2D>("chest_full_open_anim_f2");
+            ladder = this.Content.Load<Texture2D>("floor_ladder");
             font = Content.Load<SpriteFont>("Text");
             main.LoadContent(Content);
 
@@ -179,6 +186,9 @@ namespace Nihilquest
                         else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
                         {
                             _spriteBatch.Draw(tileTexture[4], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
+                        }else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsExit)
+                        {
+                            _spriteBatch.Draw(ladder, roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
                         }
                         else
                         {
@@ -271,6 +281,10 @@ namespace Nihilquest
                                                     }
                                                 }
                                             }
+                                        }
+                                        if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsExit)
+                                        {
+                                            newLevel();
                                         }
                                     }
                                     //attack enemy
@@ -412,6 +426,40 @@ namespace Nihilquest
                 }
             }
             return false;
+        }
+
+        private void newLevel()
+        {
+            Player temp = roomMap[playerRoomX, playerRoomY].Player;
+            exploredRooms = new Room[rg.MapSize, rg.MapSize];
+            rg = new RoomGeneration();
+            rg.generateRoom();
+            roomMap = rg.Level;
+
+            for (int i = 0; i < rg.MapSize; i++)
+            {
+                for (int j = 0; j < rg.MapSize; j++)
+                {
+                    if (roomMap[i, j] != null)
+                    {
+                        roomMap[i, j].generateTileMap();
+                        roomMap[i, j].createWalls();
+                        roomMap[i, j].createDoors();
+                        if (roomMap[i, j].IsStart)
+                        {
+                            playerRoomX = i;
+                            playerRoomY = j;
+                        }
+                        if (roomMap[i, j].IsBoss == true)
+                        {
+                            roomMap[i, j].TileMap[5, 5].IsExit = true;
+                        }
+
+                    }
+
+                }
+            }
+            roomMap[playerRoomX, playerRoomY].Player = temp;
         }
     }
 }

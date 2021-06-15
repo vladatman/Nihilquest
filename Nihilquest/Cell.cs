@@ -10,6 +10,7 @@ namespace Nihilquest
         private bool isLegal;
         private bool isWall;
         private bool isDoor;
+        private bool isExit;
         private Character character;
         private Item item;
         public Cell(Rectangle rectangle, bool isLegal)
@@ -24,6 +25,7 @@ namespace Nihilquest
         public Item Item { get => item; set => item = value; }
         public bool IsWall { get => isWall; set => isWall = value; }
         public bool IsDoor { get => isDoor; set => isDoor = value; }
+        public bool IsExit { get => isExit; set => isExit = value; }
 
         public bool hasCharacter()
         {
