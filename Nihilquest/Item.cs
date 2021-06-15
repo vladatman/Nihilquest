@@ -10,6 +10,7 @@ namespace Nihilquest
         private String itemName;
         private int addDmg;
         private int addMana;
+        private int addHealth;
         private int posX;
         private int posY;
         private Texture2D texture;
@@ -19,6 +20,7 @@ namespace Nihilquest
             this.ItemName = itemName;
             this.addDmg = 0;
             this.addMana = 0;
+            this.AddHealth = 0;
             this.PosX = posX;
             this.PosY = posY;
         }
@@ -29,5 +31,6 @@ namespace Nihilquest
         public int PosY { get => posY; set => posY = value; }
         public string ItemName { get => itemName; set => itemName = value; }
         public Texture2D Texture { get => texture; set => texture = value; }
+        public int AddHealth { get => addHealth; set => addHealth = value; }
     }
 }
