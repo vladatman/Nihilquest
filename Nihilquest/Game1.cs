@@ -55,24 +55,22 @@ namespace Nihilquest
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
-            foreach (Room r in roomMap)
-            {
-                if (r != null)
-                {
-                    r.generateTileMap();
-                    r.createWalls();
-                    r.createDoors();
-                }
-            }
             for (int ඞ = 0; ඞ < roomMap.Length; ඞ++)
 			{
-                for (int 🧐 = 0; 🧐 < roomMap.length; 🧐++)
+                for (int j = 0; j < roomMap.Length; j++)
 			    {
-                    if (roomMap[ඞ, 🧐].IsStart)
-	                {
-                        playerRoomX = ඞ;
-                        playerRoomY = 🧐;
-			        }
+                    if (roomMap[ඞ, j] != null)
+                    {
+                        roomMap[ඞ, j].generateTileMap();
+                        roomMap[ඞ, j].createWalls();
+                        roomMap[ඞ, j].createDoors();
+                        if (roomMap[ඞ, j].IsStart)
+                        {
+                            playerRoomX = ඞ;
+                            playerRoomY = j;
+                        }
+                    }
+
 			    }
             }
             sword.AddDmg = 5;
