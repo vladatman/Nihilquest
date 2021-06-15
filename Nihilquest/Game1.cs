@@ -98,7 +98,7 @@ namespace Nihilquest
             manaUITexture = this.Content.Load<Texture2D>("ui_flask_blue");
             damageUITexture = this.Content.Load<Texture2D>("ui_damage");
             rangeUITexture = this.Content.Load<Texture2D>("ui_range");
-            font = Content.Load<SpriteFont>("UIfont");
+            font = Content.Load<SpriteFont>("Text");
             main.LoadContent(Content);
 
 
