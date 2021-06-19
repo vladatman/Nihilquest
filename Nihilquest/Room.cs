@@ -53,6 +53,7 @@ namespace Nihilquest
         {
             for (int o = 0; o < gridSize; ++o)
             {
+
                 tileMap[o, 0].IsLegal = false;
                 tileMap[o, 0].IsWall = true;
 
@@ -67,26 +68,40 @@ namespace Nihilquest
             }
 
         }
-        public void createDoors()
+        public void createDoors(Room[,] rooms, int x, int y)
         {
             for (int o = 4; o <= 5; ++o)
             {
-                //TOP
-                tileMap[o, 0].IsLegal = true;
-                tileMap[o, 0].IsDoor = true;
-                tileMap[o, 0].IsWall = false;
-                //LEFT
-                tileMap[0, o].IsLegal = true;
-                tileMap[0, o].IsDoor = true;
-                tileMap[0, o].IsWall = false;
-                //BOTTOM
-                tileMap[o, 9].IsLegal = true;
-                tileMap[o, 9].IsDoor = true;
-                tileMap[o, 9].IsWall = false;
-                //RIGHT
-                tileMap[9, o].IsLegal = true;
-                tileMap[9, o].IsDoor = true;
-                tileMap[9, o].IsWall = false;
+                if (y != 8 && rooms[x, y + 1] != null)
+                {
+                    //TOP
+                    tileMap[o, 0].IsLegal = true;
+                    tileMap[o, 0].IsDoor = true;
+                    tileMap[o, 0].IsWall = false;
+                }
+                if (x != 8 && rooms[x + 1, y] != null)
+                {
+                    //RIGHT
+                    tileMap[9, o].IsLegal = true;
+                    tileMap[9, o].IsDoor = true;
+                    tileMap[9, o].IsWall = false;
+                }
+                if (y != 0 && rooms[x, y - 1] != null)
+                {
+                    //BOTTOM
+                    tileMap[o, 9].IsLegal = true;
+                    tileMap[o, 9].IsDoor = true;
+                    tileMap[o, 9].IsWall = false;
+                }
+                if (x != 0 && rooms[x - 1, y] != null)
+                {
+                    //LEFT
+                    tileMap[0, o].IsLegal = true;
+                    tileMap[0, o].IsDoor = true;
+                    tileMap[0, o].IsWall = false;
+                }
+                
+
             }
 
         }

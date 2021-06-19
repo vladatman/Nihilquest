@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 
@@ -36,14 +37,19 @@ namespace Nihilquest
 
         private int eIndex;
 
+        MouseState mouseState;
+
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
-        private Item mana = new Item("Mana flask", 1,2);
-        private Item sword = new Item("Sword", 1,1);
-        private Item health = new Item("Health", 8,8);
-        private Item halfMana = new Item("Half Mana", 8,7);
-        private Item halfHealth = new Item("Half Health", 8,1);
+        private Item mana = new Item("Mana flask", 1, 2);
+        private Item sword = new Item("Sword", 1, 1);
+        private Item health = new Item("Health", 8, 8);
+        private Item halfMana = new Item("Half Mana", 8, 7);
+        private Item halfHealth = new Item("Half Health", 8, 1);
+
+        private bool mouseClick = false;
+
 
         MainMenu main = new MainMenu();
 
@@ -61,14 +67,14 @@ namespace Nihilquest
             rg.generateRoom();
             roomMap = rg.Level;
             for (int i = 0; i < rg.MapSize; i++)
-			{
+            {
                 for (int j = 0; j < rg.MapSize; j++)
-			    {
+                {
                     if (roomMap[i, j] != null)
                     {
                         roomMap[i, j].generateTileMap();
                         roomMap[i, j].createWalls();
-                        roomMap[i, j].createDoors();
+                        roomMap[i, j].createDoors(roomMap,i,j);
                         if (roomMap[i, j].IsStart)
                         {
                             playerRoomX = i;
@@ -81,7 +87,7 @@ namespace Nihilquest
 
                     }
 
-			    }
+                }
             }
             sword.AddDmg = 5;
             mana.AddMana = 10;
@@ -98,7 +104,7 @@ namespace Nihilquest
             createEnemy("mob1", 5, 7);
 
             roomMap[playerRoomX, playerRoomY].Player = P;
-            exploredRooms = new Room[rg.MapSize,rg.MapSize];
+            exploredRooms = new Room[rg.MapSize, rg.MapSize];
             IsMouseVisible = true;
         }
 
@@ -108,6 +114,7 @@ namespace Nihilquest
             _graphics.PreferredBackBufferWidth = windowWidth;  // set this value to the desired width of your window
             _graphics.PreferredBackBufferHeight = windowHeight;   // set this value to the desired height of your window
             _graphics.ApplyChanges();
+            mouseState = Mouse.GetState();
             base.Initialize();
         }
 
@@ -138,7 +145,7 @@ namespace Nihilquest
             bossRoom = this.Content.Load<Texture2D>("skull");
             itemRoom = this.Content.Load<Texture2D>("chest_full_open_anim_f2");
             ladder = this.Content.Load<Texture2D>("floor_ladder");
-            font = Content.Load<SpriteFont>("Text");
+            font = this.Content.Load<SpriteFont>("Text");
             main.LoadContent(Content);
 
 
@@ -152,6 +159,16 @@ namespace Nihilquest
                 playerTurn = true;
             }
 
+            
+            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                mouseClick = true;
+            }
+            else
+            {
+                mouseClick = false;
+            }
+            mouseState = Mouse.GetState();
             main.Update();
 
             base.Update(gameTime);
@@ -164,9 +181,8 @@ namespace Nihilquest
               BlendState.AlphaBlend,
               SamplerState.PointClamp,
               null, null, null, null);
-            MouseState mouseState = Mouse.GetState();
-            int mouseX = mouseState.X;
-            int mouseY = mouseState.Y;
+            int mouseX = Mouse.GetState().X;
+            int mouseY = Mouse.GetState().Y;
             if (!Contains2D(exploredRooms, roomMap[playerRoomX, playerRoomY]))
             {
                 exploredRooms[playerRoomX, playerRoomY] = roomMap[playerRoomX, playerRoomY];
@@ -186,7 +202,8 @@ namespace Nihilquest
                         else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
                         {
                             _spriteBatch.Draw(tileTexture[4], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
-                        }else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsExit)
+                        }
+                        else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsExit)
                         {
                             _spriteBatch.Draw(ladder, roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
                         }
@@ -200,12 +217,12 @@ namespace Nihilquest
                             //hover highlight
                             if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                             {
-                                if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal)
+                                if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal || roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
                                 {
                                     _spriteBatch.Draw(tileTexture[0], roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, null, Color.Aqua * 0.5f);
                                 }
                                 //mouseclick movement
-                                if (mouseState.LeftButton == ButtonState.Pressed)
+                                if (mouseClick)
                                 {
                                     if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
@@ -232,7 +249,6 @@ namespace Nihilquest
                                                         playerRoomY++;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosX = 4;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosY = 8;
-                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
                                             }
@@ -247,7 +263,6 @@ namespace Nihilquest
                                                         playerRoomX--;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosX = 8;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosY = 4;
-                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
                                             }
@@ -262,7 +277,6 @@ namespace Nihilquest
                                                         playerRoomY--;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosX = 4;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosY = 1;
-                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
                                             }
@@ -277,7 +291,6 @@ namespace Nihilquest
                                                         playerRoomX++;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosX = 1;
                                                         roomMap[playerRoomX, playerRoomY].Player.PosY = 4;
-                                                        System.Diagnostics.Debug.WriteLine(playerRoomX + ":" + playerRoomY);
                                                     }
                                                 }
                                             }
@@ -296,20 +309,35 @@ namespace Nihilquest
                                 }
                             }
                         }
+                        //enemies attack
                         else
                         {
                             while (eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
-                                if (Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                
+                                if (!playerTurn && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
                                 {
                                     roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
                                     eIndex++;
                                 }
+                                else if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range || Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                {
+                                    int[] newPoint = Pathfinding(roomMap[playerRoomX, playerRoomY].Enemies[eIndex], roomMap[playerRoomX, playerRoomY].TileMap);
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].Character = null;
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].IsLegal = true;
+                                    roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX = newPoint[0];
+                                    roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY = newPoint[1];
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].Character = roomMap[playerRoomX, playerRoomY].Enemies[eIndex];
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].IsLegal = false;
+                                    eIndex++;
+                                } 
                                 else
                                 {
                                     eIndex = roomMap[playerRoomX, playerRoomY].Enemies.Count;
                                 }
+
                             }
+                            playerTurn = true;
                         }
                     }
                 }
@@ -341,15 +369,15 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Item = null;
                     }
                 }
-                //minimap drawin
+                //minimap drawing
                 for (int x = 0; x < rg.MapSize; x++)
                 {
                     for (int y = 0; y < rg.MapSize; y++)
                     {
                         if (exploredRooms[x, y] != null)
                         {
-                          Rectangle rectangle = new Rectangle(700+(x*32), 320+(-y*32), 32, 32);
-                            if(exploredRooms[x, y] == roomMap[playerRoomX, playerRoomY])
+                            Rectangle rectangle = new Rectangle(700 + (x * 32), 320 + (-y * 32), 32, 32);
+                            if (exploredRooms[x, y] == roomMap[playerRoomX, playerRoomY])
                             {
                                 _spriteBatch.Draw(tileTexture[0], rectangle, Color.Aqua);
                             }
@@ -359,8 +387,8 @@ namespace Nihilquest
                             }
                             if (exploredRooms[x, y].IsItem)
                             {
-                                rectangle.Height=16;
-                                rectangle.Width=16;
+                                rectangle.Height = 16;
+                                rectangle.Width = 16;
                                 rectangle.X += 8;
                                 rectangle.Y += 8;
                                 _spriteBatch.Draw(itemRoom, rectangle, Color.White);
@@ -389,8 +417,8 @@ namespace Nihilquest
             int invY = 30;
             foreach (Item item in roomMap[playerRoomX, playerRoomY].Player.Inventory)
             {
-                    _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
-                    invY += 20;
+                _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
+                invY += 20;
             }
             main.Draw(_spriteBatch);
             _spriteBatch.End();
@@ -413,13 +441,13 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Items.Add(i);
             roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Item = i;
         }
-        private bool Contains2D(Room[,] array ,Room room)
+        private bool Contains2D(Room[,] array, Room room)
         {
             for (int x = 0; x < rg.MapSize; x++)
             {
                 for (int y = 0; y < rg.MapSize; y++)
                 {
-                    if (array != null && array[x,y] == room)
+                    if (array != null && array[x, y] == room)
                     {
                         return true;
                     }
@@ -444,7 +472,7 @@ namespace Nihilquest
                     {
                         roomMap[i, j].generateTileMap();
                         roomMap[i, j].createWalls();
-                        roomMap[i, j].createDoors();
+                        roomMap[i, j].createDoors(roomMap, i, j);
                         if (roomMap[i, j].IsStart)
                         {
                             playerRoomX = i;
@@ -460,6 +488,50 @@ namespace Nihilquest
                 }
             }
             roomMap[playerRoomX, playerRoomY].Player = temp;
+        }
+        private int[] Pathfinding(Enemy E, Cell[,] tiles)
+        {
+            int playerX = roomMap[playerRoomX, playerRoomY].Player.PosX;
+            int playerY = roomMap[playerRoomX, playerRoomY].Player.PosY;
+
+            int gridSize = roomMap[playerRoomX, playerRoomY].GridSize;
+
+            int enemyX = E.PosX;
+            int enemyY = E.PosY;
+
+            int G = 0;
+            int H = 0;
+
+            int nextX = 0;
+            int nextY = 0;
+            int tempF = 100000;
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (tiles[x, y].IsLegal && tiles[x, y].IsExit == false && tiles[x, y].IsDoor == false && tiles[x, y].hasItem() == false && tiles[x,y].hasCharacter() == false)
+                    {
+                        if (Math.Abs(enemyX - x) <= 1 && Math.Abs(enemyY - y) <= 1)
+                        {
+                            G = (Math.Abs(enemyX - x) + Math.Abs(enemyY - y)) / 2 * 14 + (Math.Abs(enemyX - x) + Math.Abs(enemyY - y)) % 2 * 10;
+                            H = (Math.Abs(playerX - x) + Math.Abs(playerY - y)) / 2 * 14 + (Math.Abs(playerX - x) + Math.Abs(playerY - y)) % 2 * 10;
+                            tiles[x, y].F = G + H;
+                            //System.Diagnostics.Debug.WriteLine(x+":"+y+" ["+tiles[x, y].F+"]");
+
+                            if (tiles[x, y].F < tempF)
+                            {
+                                tempF = tiles[x, y].F;
+                                nextX = x;
+                                nextY = y;
+                            }
+                        }
+                    }
+                }
+            }
+            int[] next = new int[2];
+            next[0] = nextX;
+            next[1] = nextY;
+            return next;
         }
     }
 }

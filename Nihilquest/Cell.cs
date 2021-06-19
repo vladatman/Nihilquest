@@ -11,6 +11,9 @@ namespace Nihilquest
         private bool isWall;
         private bool isDoor;
         private bool isExit;
+        private int g;
+        private int h;
+        private int f;
         private Character character;
         private Item item;
         public Cell(Rectangle rectangle, bool isLegal)
@@ -26,6 +29,9 @@ namespace Nihilquest
         public bool IsWall { get => isWall; set => isWall = value; }
         public bool IsDoor { get => isDoor; set => isDoor = value; }
         public bool IsExit { get => isExit; set => isExit = value; }
+        public int G { get => G; set => G = value; }
+        public int H { get => h; set => h = value; }
+        public int F { get => f; set => f = value; }
 
         public bool hasCharacter()
         {
