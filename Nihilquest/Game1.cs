@@ -3,17 +3,22 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Runtime;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Nihilquest
 {
-    public class Game1 : Game
+    internal class Game1 : Game
     {
 
         //System.Diagnostics.Debug.WriteLine(); write to console
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        public static string appDataFilePath;
+        
 
         Texture2D[] tileTexture = new Texture2D[8];
         Texture2D playerTexture;
@@ -33,7 +38,7 @@ namespace Nihilquest
 
         private int playerRoomX;
         private int playerRoomY;
-        private Player P = new Player("Wairen", 5, 5);
+        public static Player P;
 
         private int eIndex;
 
@@ -57,11 +62,16 @@ namespace Nihilquest
         private SpriteFont font;
         public Game1()
         {
+
+            appDataFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             playerRoomX = 1;
             playerRoomY = 1;
 
+
+            P = new Player("Wairen", 5, 5);
             eIndex = 0;
             rg = new RoomGeneration();
             rg.generateRoom();
@@ -146,13 +156,17 @@ namespace Nihilquest
             itemRoom = this.Content.Load<Texture2D>("chest_full_open_anim_f2");
             ladder = this.Content.Load<Texture2D>("floor_ladder");
             font = this.Content.Load<SpriteFont>("Text");
-            main.LoadContent(Content);
 
+
+            main.LoadContent(Content);
+            
 
         }
 
         protected override void Update(GameTime gameTime)
         {
+
+            
 
             if (Keyboard.GetState().IsKeyDown(Keys.T))
             {
