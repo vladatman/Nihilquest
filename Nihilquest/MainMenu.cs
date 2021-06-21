@@ -118,48 +118,52 @@ namespace Nihilquest
 
         public void onClick(string element)
         {
-            if (element == "button_play")
+            if (gameState == GameState.mainMenu)
             {
-                gameState = GameState.inGame;
-            }
-
-            if (element == "button_load")
-            {
-                xml = save.GetFile("XML\\nihilquestSave.xml");
-                if (xml != null)
+                if (element == "button_play")
                 {
-                    //Load player stats
-                    Game1.P.Name = xml.Element("Player").Element("name").Value;
-                    Game1.P.PosX = Convert.ToInt32(xml.Element("Player").Element("PosX").Value);
-                    Game1.P.PosY = Convert.ToInt32(xml.Element("Player").Element("PosY").Value);
-                    Game1.P.Dmg = Convert.ToInt32(xml.Element("Player").Element("Dmg").Value);
-                    Game1.P.Hp = Convert.ToInt32(xml.Element("Player").Element("Hp").Value);
-                    Game1.P.Mana = Convert.ToInt32(xml.Element("Player").Element("Mana").Value);
-                    Game1.P.Range = Convert.ToInt32(xml.Element("Player").Element("Range").Value);
-                    Game1.P.ManaRegen = Convert.ToInt32(xml.Element("Player").Element("ManaRegen").Value);
+                    gameState = GameState.inGame;
                 }
-            }
 
-            if (element == "button_save") {
+                if (element == "button_load")
+                {
+                    xml = save.GetFile("XML\\nihilquestSave.xml");
+                    if (xml != null)
+                    {
+                        //Load player stats
+                        Game1.P.Name = xml.Element("Player").Element("name").Value;
+                        Game1.P.PosX = Convert.ToInt32(xml.Element("Player").Element("PosX").Value);
+                        Game1.P.PosY = Convert.ToInt32(xml.Element("Player").Element("PosY").Value);
+                        Game1.P.Dmg = Convert.ToInt32(xml.Element("Player").Element("Dmg").Value);
+                        Game1.P.Hp = Convert.ToInt32(xml.Element("Player").Element("Hp").Value);
+                        Game1.P.Mana = Convert.ToInt32(xml.Element("Player").Element("Mana").Value);
+                        Game1.P.Range = Convert.ToInt32(xml.Element("Player").Element("Range").Value);
+                        Game1.P.ManaRegen = Convert.ToInt32(xml.Element("Player").Element("ManaRegen").Value);
+                    }
+                }
 
-                XDocument xml = new XDocument(
-                                            new XElement("Player",
-                                                new XElement("name", Game1.P.Name),
-                                                new XElement("PosX", Game1.P.PosX),
-                                                new XElement("PosY", Game1.P.PosY),
-                                                new XElement("Dmg", Game1.P.Dmg),
-                                                new XElement("Hp", Game1.P.Hp),
-                                                new XElement("Mana", Game1.P.Mana),
-                                                new XElement("Range", Game1.P.Range),
-                                                new XElement("ManaRegen", Game1.P.ManaRegen))
-                                            );
+                if (element == "button_save")
+                {
 
-                save.HandleSaveFormates(xml, "nihilquestSave.xml");
-            }
+                    XDocument xml = new XDocument(
+                                                new XElement("Player",
+                                                    new XElement("name", Game1.P.Name),
+                                                    new XElement("PosX", Game1.P.PosX),
+                                                    new XElement("PosY", Game1.P.PosY),
+                                                    new XElement("Dmg", Game1.P.Dmg),
+                                                    new XElement("Hp", Game1.P.Hp),
+                                                    new XElement("Mana", Game1.P.Mana),
+                                                    new XElement("Range", Game1.P.Range),
+                                                    new XElement("ManaRegen", Game1.P.ManaRegen))
+                                                );
 
-            if (element == "button_exit")
-            {
-                gameState = GameState.exit;
+                    save.HandleSaveFormates(xml, "nihilquestSave.xml");
+                }
+
+                if (element == "button_exit")
+                {
+                    gameState = GameState.exit;
+                }
             }
         }
     }
