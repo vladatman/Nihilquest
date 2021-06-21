@@ -57,6 +57,7 @@ namespace Nihilquest
         private Item health = new Item("Health", 8, 8);
         private Item halfMana = new Item("Half Mana", 8, 7);
         private Item halfHealth = new Item("Half Health", 8, 1);
+        private Item activeItemTest = new ActiveItem("Active", 8, 2, 1, P);
 
         private bool mouseClick = false;
 
@@ -118,6 +119,7 @@ namespace Nihilquest
             createItem(health);
             createItem(halfHealth);
             createItem(halfMana);
+            createItem(activeItemTest);
 
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
@@ -155,6 +157,8 @@ namespace Nihilquest
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
             sword.Texture = this.Content.Load<Texture2D>("weapon_knife");
             mana.Texture = this.Content.Load<Texture2D>("flask_big_blue");
+            // CHANGE THIS TEXTURE <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+            activeItemTest.Texture = this.Content.Load<Texture2D>("flask_big_blue");
             health.Texture = this.Content.Load<Texture2D>("heart_full");
             halfHealth.Texture = this.Content.Load<Texture2D>("heart_half");
             halfMana.Texture = this.Content.Load<Texture2D>("small_flask_blue");
@@ -205,6 +209,20 @@ namespace Nihilquest
                 playerTurn = true;
             }
 
+            // Check for keypress to activate special item ability
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+	        {
+                if (playerTurn)
+	            {
+                    foreach (ActiveItem item in P.Inventory)
+	                {
+                        if (item.GetType == ActiveItem)
+	                    {
+                            item.ability(roomMap, playerRoomX, playerRoomY);
+	                    }
+	                }
+	            }
+	        }
             
             if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
@@ -500,6 +518,8 @@ namespace Nihilquest
             _spriteBatch.Draw(health.Texture, new Vector2(670, 30), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Hp, new Vector2(690, 30), Color.White);
             _spriteBatch.Draw(halfMana.Texture, new Vector2(670, 50), Color.White);
+            // CHANGE THIS TEXTURE <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+            _spriteBatch.Draw(activeItemTest.Texture, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Mana, new Vector2(690, 50), Color.White);
             _spriteBatch.Draw(damageUITexture, new Vector2(672, 70), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(690, 70), Color.White);
