@@ -50,7 +50,7 @@ namespace Nihilquest
             main.Find(x => x.AssetName == "button_load").MoveElement(0, -50);
             main.Find(x => x.AssetName == "button_save").MoveElement(0, 100);
             main.Find(x => x.AssetName == "button_exit").MoveElement(0, 250);
-            gameState = GameState.inGame;
+            gameState = GameState.mainMenu;
 
             save = new Save(1, "Nihilquest");
             
