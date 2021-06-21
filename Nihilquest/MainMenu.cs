@@ -11,14 +11,8 @@ namespace Nihilquest
 {
     class MainMenu
     {
-        enum GameState
-        {
-            mainMenu,
-            inGame,
-            exit
-        }
 
-        GameState gameState;
+        public GameState gameState;
 
         private bool isKeyPressed = false;
         public Save save;

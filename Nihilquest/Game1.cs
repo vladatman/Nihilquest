@@ -206,7 +206,7 @@ namespace Nihilquest
             }
 
             
-            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
             {
                 mouseClick = true;
             }
