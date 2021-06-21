@@ -13,10 +13,6 @@ namespace Nihilquest
         public ActiveItem(string itemName, int posX, int posY, int itemType)
         {
             this.ItemName = itemName;
-            this.addDmg = 0;
-            this.addMana = 0;
-            this.addHealth = 0;
-            this.AddManaRegen = 0;
             this.PosX = posX;
             this.PosY = posY;
             this.itemType = itemType;
@@ -24,14 +20,14 @@ namespace Nihilquest
             this.hpToHeal = 10;
         }
 
-        public void ability(Room[,] roomMap , int playerRoomX, int playerRoomY, Player player){
+        public void ability(Room[,] roomMap , int playerRoomX, int playerRoomY){
             switch (itemType)
 	        {
                 // Deal damage to everything
                 case 1:
-                    foreach (Enemy enemy in roomMap[playerRoomX, playerRoomY])
+                    foreach (Enemy enemy in roomMap[playerRoomX, playerRoomY].Enemies)
 	                {
-                        if (!enemy.isDead)
+                        if (!enemy.isDead())
 	                    {
                             enemy.Hp -= damageToDeal;
 	                    }
@@ -39,9 +35,9 @@ namespace Nihilquest
                     break;
 
                 case 2:
-                    if (!player.isDead)
+                    if (!Game1.P.isDead())
 	                {
-                        player.Hp += hpToHeal;
+                        Game1.P.Hp += hpToHeal;
 	                }
                     break;
 

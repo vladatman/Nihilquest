@@ -57,7 +57,7 @@ namespace Nihilquest
         private Item health = new Item("Health", 8, 8);
         private Item halfMana = new Item("Half Mana", 8, 7);
         private Item halfHealth = new Item("Half Health", 8, 1);
-        private Item activeItemTest = new ActiveItem("Active", 8, 2, 1, P);
+        private ActiveItem activeItemTest = new ActiveItem("Active", 8, 2, 1);
 
         private bool mouseClick = false;
 
@@ -213,7 +213,7 @@ namespace Nihilquest
 	            {
                     foreach (ActiveItem item in P.Inventory)
 	                {
-                        if (item.GetType == ActiveItem)
+                        if (item is ActiveItem)
 	                    {
                             item.ability(roomMap, playerRoomX, playerRoomY);
 	                    }
