@@ -4,17 +4,16 @@ using System.Text;
 
 namespace Nihilquest
 {
-    class Enemy : Character
+    class Boss : Character
     {
-        public Enemy(string name, int posX, int posY)
+        public Boss(string name, int posX, int posY)
         {
             Name = name;
             PosX = posX;
             PosY = posY;
-            Dmg = 5;
-            Hp = 20;
-            Range = 2;
+            Dmg = 10;
+            Hp = 50;
+            Range = 3;
         }
-        
     }
 }
