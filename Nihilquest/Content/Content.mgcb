@@ -25,18 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:bg.png
 
-#begin Boss.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Boss.png
-
 #begin button_start.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -47,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:button_start.jpg
+/build:button_save.png
 
 #begin chest_full_open_anim_f2.png
 /importer:TextureImporter
