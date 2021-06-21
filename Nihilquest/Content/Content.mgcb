@@ -229,6 +229,36 @@
 /processorParam:TextureFormat=Color
 /build:knight_f_run_anim_f0.png
 
+#begin sfx/FootstepPlayer.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/FootstepPlayer.wav
+
+#begin sfx/Hit damage.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/Hit damage.wav
+
+#begin sfx/Ouch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/Ouch.wav
+
+#begin sfx/PickupStat.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/PickupStat.wav
+
+#begin sfx/Text.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/Text.wav
+
 #begin skull.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -253,12 +283,84 @@
 /processorParam:TextureFormat=Color
 /build:small_flask_blue.png
 
+#begin songs/Against All Odds.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Against All Odds.ogg
+
+#begin songs/Before the Dawn.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Before the Dawn.ogg
+
+#begin songs/Fire in the Hole.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Fire in the Hole.ogg
+
+#begin songs/Gone Fishing.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Gone Fishing.ogg
+
+#begin songs/Hopeful Feeling.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Hopeful Feeling.ogg
+
+#begin songs/Invitation.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Invitation.ogg
+
+#begin songs/Point Zero.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Point Zero.ogg
+
+#begin songs/Shelf Space.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Shelf Space.ogg
+
+#begin songs/Singularity.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Singularity.ogg
+
+#begin songs/Tonal Dissonance.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:songs/Tonal Dissonance.ogg
+
 #begin Text.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Text.spritefont
+
+#begin UI.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI.png
 
 #begin ui_damage.png
 /importer:TextureImporter

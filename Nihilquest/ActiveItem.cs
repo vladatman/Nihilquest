@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Nihilquest
 {
-    class ActiveItem : Item
+    class ActiveItem
     {
     }
 }
