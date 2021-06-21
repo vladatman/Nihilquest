@@ -90,6 +90,7 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsBoss == true)
                         {
+                            createBoss("boss1", 5, 5);
                             roomMap[i, j].TileMap[5, 5].IsExit = true;
                         }
 
