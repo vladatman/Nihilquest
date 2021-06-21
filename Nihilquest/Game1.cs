@@ -19,6 +19,7 @@ namespace Nihilquest
         Texture2D[] tileTexture = new Texture2D[8];
         Texture2D playerTexture;
         Texture2D enemyTexture;
+        Texture2D bossTexture;
         Texture2D obstTexture;
         Texture2D heartTexture;
         Texture2D manaUITexture;
@@ -109,6 +110,7 @@ namespace Nihilquest
 
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
+            createBoss("boss1", 5, 5);
 
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
@@ -139,6 +141,7 @@ namespace Nihilquest
             tileTexture[7] = this.Content.Load<Texture2D>("floor_8");
             playerTexture = this.Content.Load<Texture2D>("knight_f_run_anim_f0");
             enemyTexture = this.Content.Load<Texture2D>("imp_idle_anim_f0");
+            bossTexture = this.Content.Load<Texture2D>("boss");
             obstTexture = this.Content.Load<Texture2D>("wall_mid");
             sword.Texture = this.Content.Load<Texture2D>("weapon_knife");
             mana.Texture = this.Content.Load<Texture2D>("flask_big_blue");
@@ -480,6 +483,13 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Enemies.Add(e);
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = e;
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = false;
+        }
+        private void createBoss(string name, int posX, int posY)
+        {
+            Boss b = new Boss(name, posX, posY);
+            roomMap[playerRoomX, playerRoomY].Enemies.Add(b);
+            roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].Character = b;
+            roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].IsLegal = false;
         }
         private void createItem(Item i)
         {
