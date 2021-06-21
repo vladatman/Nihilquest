@@ -37,14 +37,14 @@ namespace Nihilquest
         List<Song> BGMlist;
         List<SoundEffect> SFXlist;
 
-        public Room[,] roomMap;
+        public static Room[,] roomMap;
         private RoomGeneration rg;
-        public Room[,] exploredRooms;
+        public  static Room[,] exploredRooms;
 
         private int playerRoomX;
         private int playerRoomY;
         public static Player P;
-        public int currentLevel;
+        public static int currentLevel;
         private int eIndex;
 
         MouseState mouseState;
@@ -61,7 +61,7 @@ namespace Nihilquest
         private bool mouseClick = false;
 
 
-        MainMenu main = new MainMenu();
+        MainMenu main;
 
         private bool playerTurn = true;
         private SpriteFont font;
@@ -125,6 +125,8 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
             IsMouseVisible = true;
+
+            main = new MainMenu();
         }
 
         protected override void Initialize()

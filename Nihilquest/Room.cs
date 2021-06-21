@@ -36,6 +36,9 @@ namespace Nihilquest
           TileMap = new Cell[GridSize, GridSize];
           Enemies = new List<Enemy>();
           items = new List<Item>();
+            isStart = false;
+            isBoss = false;
+            IsItem = false;
 
         }
 
