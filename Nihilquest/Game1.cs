@@ -2,19 +2,23 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Audio;
 using System;
+using System.Runtime;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Nihilquest
 {
-    public class Game1 : Game
+    internal class Game1 : Game
     {
 
         //System.Diagnostics.Debug.WriteLine(); write to console
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        public static string appDataFilePath;
+        
 
         Texture2D[] tileTexture = new Texture2D[8];
         Texture2D playerTexture;
@@ -27,10 +31,6 @@ namespace Nihilquest
         Texture2D itemRoom;
         Texture2D bossRoom;
         Texture2D ladder;
-        Texture2D mainUI;
-        Song BGMstart;
-        List<Song> BGMlist;
-        List<SoundEffect> SFXlist;
 
         private Room[,] roomMap;
         private RoomGeneration rg;
@@ -38,7 +38,7 @@ namespace Nihilquest
 
         private int playerRoomX;
         private int playerRoomY;
-        private Player P = new Player("Wairen", 5, 5);
+        public static Player P;
 
         private int eIndex;
 
@@ -62,13 +62,16 @@ namespace Nihilquest
         private SpriteFont font;
         public Game1()
         {
+
+            appDataFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            BGMlist = new List<Song>();
-            SFXlist = new List<SoundEffect>();
             playerRoomX = 1;
             playerRoomY = 1;
 
+
+            P = new Player("Wairen", 5, 5);
             eIndex = 0;
             rg = new RoomGeneration();
             rg.generateRoom();
@@ -152,34 +155,18 @@ namespace Nihilquest
             bossRoom = this.Content.Load<Texture2D>("skull");
             itemRoom = this.Content.Load<Texture2D>("chest_full_open_anim_f2");
             ladder = this.Content.Load<Texture2D>("floor_ladder");
-            mainUI = this.Content.Load<Texture2D>("UI");
             font = this.Content.Load<SpriteFont>("Text");
 
-            BGMstart = this.Content.Load<Song>("songs/Invitation");
-            BGMlist.Add(this.Content.Load<Song>("songs/Against All Odds"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Before the Dawn"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Fire in the Hole"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Gone Fishing"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Hopeful Feeling"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Point Zero"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Shelf Space"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Singularity"));
-            BGMlist.Add(this.Content.Load<Song>("songs/Tonal Dissonance"));
 
-            SFXlist.Add(this.Content.Load<SoundEffect>("sfx/Hit damage"));
-            SFXlist.Add(this.Content.Load<SoundEffect>("sfx/FootstepPlayer"));
-            SFXlist.Add(this.Content.Load<SoundEffect>("sfx/Ouch"));
-            SFXlist.Add(this.Content.Load<SoundEffect>("sfx/PickupStat"));
-
-            MediaPlayer.Volume = 0.03f;
-            MediaPlayer.Play(BGMstart);
             main.LoadContent(Content);
-
+            
 
         }
 
         protected override void Update(GameTime gameTime)
         {
+
+            
 
             if (Keyboard.GetState().IsKeyDown(Keys.T))
             {
@@ -196,12 +183,6 @@ namespace Nihilquest
                 mouseClick = false;
             }
             mouseState = Mouse.GetState();
-            Random rand = new Random();
-            if (MediaPlayer.State != MediaState.Playing)
-            {
-                MediaPlayer.Play(BGMlist[rand.Next(BGMlist.Count)]);
-            }
-
             main.Update();
 
             base.Update(gameTime);
@@ -259,8 +240,6 @@ namespace Nihilquest
                                 {
                                     if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
-                                        SoundEffectInstance soundEffectInstance = SFXlist[1].CreateInstance();
-                                        soundEffectInstance.Play();
                                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = null;
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
                                         roomMap[playerRoomX, playerRoomY].Player.PosY = j;
@@ -269,9 +248,6 @@ namespace Nihilquest
                                         //pickup item
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
                                         {
-                                            soundEffectInstance = SFXlist[3].CreateInstance();
-                                            soundEffectInstance.Volume = 0.1f;
-                                            soundEffectInstance.Play();
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                         }
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
@@ -342,9 +318,6 @@ namespace Nihilquest
                                     else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
                                     {
                                         roomMap[playerRoomX, playerRoomY].Player.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
-                                        SoundEffectInstance soundEffectInstance = SFXlist[0].CreateInstance();
-                                        soundEffectInstance.Volume = 0.4f;
-                                        soundEffectInstance.Play();
                                         playerTurn = false;
                                     }
                                 }
@@ -359,9 +332,6 @@ namespace Nihilquest
                                 if (!playerTurn && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
                                 {
                                     roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
-                                    SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
-                                    soundEffectInstance.Volume = 0.1f;
-                                    soundEffectInstance.Play();
                                     eIndex++;
                                 }
                                 else if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range || Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
@@ -413,7 +383,6 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].TileMap[i.PosX, i.PosY].Item = null;
                     }
                 }
-                _spriteBatch.Draw(mainUI, new Rectangle(640, 0, 320, 640), Color.White);
                 //minimap drawing
                 for (int x = 0; x < rg.MapSize; x++)
                 {
@@ -421,7 +390,7 @@ namespace Nihilquest
                     {
                         if (exploredRooms[x, y] != null)
                         {
-                            Rectangle rectangle = new Rectangle(700 + (x * 32), 550 + (-y * 32), 32, 32);
+                            Rectangle rectangle = new Rectangle(700 + (x * 32), 320 + (-y * 32), 32, 32);
                             if (exploredRooms[x, y] == roomMap[playerRoomX, playerRoomY])
                             {
                                 _spriteBatch.Draw(tileTexture[0], rectangle, Color.Aqua);
