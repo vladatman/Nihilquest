@@ -21,7 +21,6 @@ namespace Nihilquest
         Texture2D enemyTexture;
         Texture2D bossTexture;
         Texture2D obstTexture;
-        Texture2D heartTexture;
         Texture2D manaUITexture;
         Texture2D damageUITexture;
         Texture2D rangeUITexture;
@@ -61,6 +60,7 @@ namespace Nihilquest
 
         private bool playerTurn = true;
         private SpriteFont font;
+        private bool canLeave = true;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -90,8 +90,7 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsBoss == true)
                         {
-                            createBoss("boss1", 5, 5);
-                            roomMap[i, j].TileMap[5, 5].IsExit = true;
+                            createBoss("boss1", i, j);
                         }
 
                     }
@@ -148,8 +147,6 @@ namespace Nihilquest
             health.Texture = this.Content.Load<Texture2D>("heart_full");
             halfHealth.Texture = this.Content.Load<Texture2D>("heart_half");
             halfMana.Texture = this.Content.Load<Texture2D>("small_flask_blue");
-            heartTexture = this.Content.Load<Texture2D>("ui_heart_full");
-            manaUITexture = this.Content.Load<Texture2D>("ui_flask_blue");
             damageUITexture = this.Content.Load<Texture2D>("ui_damage");
             rangeUITexture = this.Content.Load<Texture2D>("ui_range");
             bossRoom = this.Content.Load<Texture2D>("skull");
@@ -219,6 +216,7 @@ namespace Nihilquest
               null, null, null, null);
             int mouseX = Mouse.GetState().X;
             int mouseY = Mouse.GetState().Y;
+            
             if (!Contains2D(exploredRooms, roomMap[playerRoomX, playerRoomY]))
             {
                 exploredRooms[playerRoomX, playerRoomY] = roomMap[playerRoomX, playerRoomY];
@@ -277,7 +275,7 @@ namespace Nihilquest
                                             soundEffectInstance.Play();
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                         }
-                                        if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
+                                        if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0 && canLeave)
                                         {
                                             //TOP
                                             if ((i == 4 || i == 5) && j == 0)
@@ -359,7 +357,7 @@ namespace Nihilquest
                             while (eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
                                 
-                                if (!playerTurn && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                if (!playerTurn && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
                                 {
                                     roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
                                     SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
@@ -367,7 +365,7 @@ namespace Nihilquest
                                     soundEffectInstance.Play();
                                     eIndex++;
                                 }
-                                else if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range || Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosY) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
+                                else if(Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range || Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY - roomMap[playerRoomX, playerRoomY].Player.PosY) >= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
                                 {
                                     int[] newPoint = Pathfinding(roomMap[playerRoomX, playerRoomY].Enemies[eIndex], roomMap[playerRoomX, playerRoomY].TileMap);
                                     roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].Character = null;
@@ -383,6 +381,26 @@ namespace Nihilquest
                                     eIndex = roomMap[playerRoomX, playerRoomY].Enemies.Count;
                                 }
 
+                            }
+                            if(roomMap[playerRoomX, playerRoomY].IsBoss == true)
+                            {
+                                if (Math.Abs(roomMap[playerRoomX, playerRoomY].Boss.PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) >= roomMap[playerRoomX, playerRoomY].Boss.Range || Math.Abs(roomMap[playerRoomX, playerRoomY].Boss.PosY - roomMap[playerRoomX, playerRoomY].Player.PosY) >= roomMap[playerRoomX, playerRoomY].Boss.Range)
+                                {
+                                    int[] newPoint = Pathfinding(roomMap[playerRoomX, playerRoomY].Boss, roomMap[playerRoomX, playerRoomY].TileMap);
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Character = null;
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].IsLegal = true;
+                                    roomMap[playerRoomX, playerRoomY].Boss.PosX = newPoint[0];
+                                    roomMap[playerRoomX, playerRoomY].Boss.PosY = newPoint[1];
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Character = roomMap[playerRoomX, playerRoomY].Boss;
+                                    roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].IsLegal = false;
+                                }
+                                else
+                                {
+                                    roomMap[playerRoomX, playerRoomY].Boss.Attack(roomMap[playerRoomX, playerRoomY].Player);
+                                    SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
+                                    soundEffectInstance.Volume = 0.1f;
+                                    soundEffectInstance.Play();
+                                }
                             }
                             playerTurn = true;
                         }
@@ -402,6 +420,23 @@ namespace Nihilquest
                         _spriteBatch.Draw(enemyTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle, Color.White);
                         _spriteBatch.DrawString(font, "HP:" + roomMap[playerRoomX, playerRoomY].Enemies[e].Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Rectangle.Y), Color.White);
 
+                    }
+                }
+                //boss drawing
+                if(roomMap[playerRoomX, playerRoomY].IsBoss == true)
+                {
+                    if(roomMap[playerRoomX, playerRoomY].Boss.isDead() == false)
+                    {
+                        _spriteBatch.Draw(bossTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle, Color.White);
+                        _spriteBatch.DrawString(font, "HP:" + roomMap[playerRoomX, playerRoomY].Boss.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.Y), Color.White);
+                        canLeave = false;
+                    }
+                    else
+                    {
+                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Character = null;
+                        roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].IsLegal = true;
+                        roomMap[playerRoomX, playerRoomY].TileMap[5, 5].IsExit = true;
+                        canLeave = true;
                     }
                 }
                 //item drawing
@@ -452,9 +487,9 @@ namespace Nihilquest
             }
 
             _spriteBatch.DrawString(font, "Stats:", new Vector2(670, 10), Color.White);
-            _spriteBatch.Draw(heartTexture, new Vector2(670, 30), Color.White);
+            _spriteBatch.Draw(health.Texture, new Vector2(670, 30), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Hp, new Vector2(690, 30), Color.White);
-            _spriteBatch.Draw(manaUITexture, new Vector2(670, 50), Color.White);
+            _spriteBatch.Draw(halfMana.Texture, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Mana, new Vector2(690, 50), Color.White);
             _spriteBatch.Draw(damageUITexture, new Vector2(672, 70), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(690, 70), Color.White);
@@ -484,12 +519,12 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].Character = e;
             roomMap[playerRoomX, playerRoomY].TileMap[e.PosX, e.PosY].IsLegal = false;
         }
-        private void createBoss(string name, int posX, int posY)
+        private void createBoss(string name, int roomX, int roomY)
         {
-            Boss b = new Boss(name, posX, posY);
-            roomMap[playerRoomX, playerRoomY].Bosses.Add(b);
-            roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].Character = b;
-            roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].IsLegal = false;
+            Boss b = new Boss(name, 4, 4);
+            roomMap[roomX, roomY].Boss = b;
+            roomMap[roomX, roomY].TileMap[b.PosX, b.PosY].Character = b;
+            roomMap[roomX, roomY].TileMap[b.PosX, b.PosY].IsLegal = false;
         }
         private void createItem(Item i)
         {
@@ -535,7 +570,7 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsBoss == true)
                         {
-                            createBoss("boss1", 5, 5);
+                            createBoss("boss1", i, j);
                             roomMap[i, j].TileMap[5, 5].IsExit = true;
                         }
 
@@ -545,7 +580,7 @@ namespace Nihilquest
             }
             roomMap[playerRoomX, playerRoomY].Player = temp;
         }
-        private int[] Pathfinding(Enemy E, Cell[,] tiles)
+        private int[] Pathfinding(Character E, Cell[,] tiles)
         {
             int playerX = roomMap[playerRoomX, playerRoomY].Player.PosX;
             int playerY = roomMap[playerRoomX, playerRoomY].Player.PosY;

@@ -30,5 +30,9 @@ namespace Nihilquest
                charA.Hp -= dmg;
             }
         }
+        public bool isDead()
+        {
+            return Hp <= 0 ? true : false;
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Nihilquest
             PosY = posY;
             Dmg = 10;
             Hp = 50;
-            Range = 2;
+            Range = 3;
         }
     }
 }

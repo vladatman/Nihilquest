@@ -15,9 +15,6 @@ namespace Nihilquest
             Hp = 20;
             Range = 2;
         }
-        public bool isDead()
-        {
-            return Hp <= 0 ? true : false;
-        }
+        
     }
 }
