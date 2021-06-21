@@ -37,14 +37,14 @@ namespace Nihilquest
         List<Song> BGMlist;
         List<SoundEffect> SFXlist;
 
-        private Room[,] roomMap;
+        public static Room[,] roomMap;
         private RoomGeneration rg;
-        private Room[,] exploredRooms;
+        public  static Room[,] exploredRooms;
 
         private int playerRoomX;
         private int playerRoomY;
         public static Player P;
-
+        public static int currentLevel;
         private int eIndex;
 
         MouseState mouseState;
@@ -62,7 +62,7 @@ namespace Nihilquest
         private bool mouseClick = false;
 
 
-        MainMenu main = new MainMenu();
+        MainMenu main;
 
         private bool playerTurn = true;
         private SpriteFont font;
@@ -127,6 +127,8 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
             IsMouseVisible = true;
+
+            main = new MainMenu();
         }
 
         protected override void Initialize()
@@ -204,11 +206,6 @@ namespace Nihilquest
                 MediaPlayer.Play(BGMlist[rand.Next(BGMlist.Count)]);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.T))
-            {
-                playerTurn = true;
-            }
-
             // Check for keypress to activate special item ability
             if (Keyboard.GetState().IsKeyDown(Keys.W))
 	        {
@@ -224,7 +221,7 @@ namespace Nihilquest
 	            }
 	        }
             
-            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
             {
                 mouseClick = true;
             }
@@ -601,7 +598,6 @@ namespace Nihilquest
                         if (roomMap[i, j].IsBoss == true)
                         {
                             createBoss("boss1", i, j);
-                            roomMap[i, j].TileMap[5, 5].IsExit = true;
                         }
 
                     }
