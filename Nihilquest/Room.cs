@@ -8,6 +8,7 @@ namespace Nihilquest
     class Room
     {
         private List<Enemy> enemies;
+        private List<Boss> bosses;
         private List<Item> items;
         private Cell[,] tileMap;
         private bool isStart;
@@ -26,6 +27,7 @@ namespace Nihilquest
         public bool IsBoss { get => isBoss; set => isBoss = value; }
         public bool IsItem { get => isItem; set => isItem = value; }
         internal List<Enemy> Enemies { get => enemies; set => enemies = value; }
+        internal List<Boss> Bosses { get => bosses; set => bosses = value; }
         internal List<Item> Items { get => items; set => items = value; }
 
 
@@ -33,6 +35,7 @@ namespace Nihilquest
         {
           TileMap = new Cell[GridSize, GridSize];
           Enemies = new List<Enemy>();
+          Bosses = new List<Boss>();
           items = new List<Item>();
 
         }

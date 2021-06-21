@@ -110,7 +110,6 @@ namespace Nihilquest
 
             createEnemy("mob1", 5, 6);
             createEnemy("mob1", 5, 7);
-            createBoss("boss1", 5, 5);
 
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
@@ -487,7 +486,7 @@ namespace Nihilquest
         private void createBoss(string name, int posX, int posY)
         {
             Boss b = new Boss(name, posX, posY);
-            roomMap[playerRoomX, playerRoomY].Enemies.Add(b);
+            roomMap[playerRoomX, playerRoomY].Bosses.Add(b);
             roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].Character = b;
             roomMap[playerRoomX, playerRoomY].TileMap[b.PosX, b.PosY].IsLegal = false;
         }
@@ -535,6 +534,7 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsBoss == true)
                         {
+                            createBoss("boss1", 5, 5);
                             roomMap[i, j].TileMap[5, 5].IsExit = true;
                         }
 
