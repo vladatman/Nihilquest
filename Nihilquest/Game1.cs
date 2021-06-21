@@ -37,9 +37,9 @@ namespace Nihilquest
         List<Song> BGMlist;
         List<SoundEffect> SFXlist;
 
-        private Room[,] roomMap;
+        public Room[,] roomMap;
         private RoomGeneration rg;
-        private Room[,] exploredRooms;
+        public Room[,] exploredRooms;
 
         private int playerRoomX;
         private int playerRoomY;
@@ -201,7 +201,7 @@ namespace Nihilquest
             }
 
             
-            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
             {
                 mouseClick = true;
             }

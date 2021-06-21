@@ -6,19 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
 using Microsoft.Xna.Framework.Input;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace Nihilquest
 {
     class MainMenu
     {
-        enum GameState
-        {
-            mainMenu,
-            inGame,
-            exit
-        }
 
-        GameState gameState;
+        public GameState gameState;
 
         private bool isKeyPressed = false;
         public Save save;
@@ -139,6 +134,13 @@ namespace Nihilquest
                         Game1.P.Mana = Convert.ToInt32(xml.Element("Player").Element("Mana").Value);
                         Game1.P.Range = Convert.ToInt32(xml.Element("Player").Element("Range").Value);
                         Game1.P.ManaRegen = Convert.ToInt32(xml.Element("Player").Element("ManaRegen").Value);
+
+                        //Load player inventory
+                        Game1.P.Inventory.Clear();
+                        List<XElement> xElementList = xml.Element("Player").Descendants("Inventory").Descendants("Item").ToList();
+                        foreach (XElement xe in xElementList)   Game1.P.Inventory.Add(new Item(xe.Element("ItemName").Value));
+
+                        //
                     }
                 }
 
@@ -154,8 +156,13 @@ namespace Nihilquest
                                                     new XElement("Hp", Game1.P.Hp),
                                                     new XElement("Mana", Game1.P.Mana),
                                                     new XElement("Range", Game1.P.Range),
-                                                    new XElement("ManaRegen", Game1.P.ManaRegen))
-                                                );
+                                                    new XElement("ManaRegen", Game1.P.ManaRegen),
+                                                    new XElement("Inventory")));
+                    foreach (Item item in Game1.P.Inventory)
+                    {
+                        xml.Element("Player").Element("Inventory").Add(new XElement("Item", new XElement("ItemName", item.ItemName)));
+                    }
+                    
 
                     save.HandleSaveFormates(xml, "nihilquestSave.xml");
                 }
