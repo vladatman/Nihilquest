@@ -37,9 +37,9 @@ namespace Nihilquest
         List<Song> BGMlist;
         List<SoundEffect> SFXlist;
 
-        private Room[,] roomMap;
+        public Room[,] roomMap;
         private RoomGeneration rg;
-        private Room[,] exploredRooms;
+        public Room[,] exploredRooms;
 
         private int playerRoomX;
         private int playerRoomY;
