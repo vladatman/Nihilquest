@@ -529,12 +529,12 @@ namespace Nihilquest
                         {
                             G = (Math.Abs(enemyX - x) + Math.Abs(enemyY - y)) / 2 * 14 + (Math.Abs(enemyX - x) + Math.Abs(enemyY - y)) % 2 * 10;
                             H = (Math.Abs(playerX - x) + Math.Abs(playerY - y)) / 2 * 14 + (Math.Abs(playerX - x) + Math.Abs(playerY - y)) % 2 * 10;
-                            tiles[x, y].F = G + H;
+                            tiles[x, y].TileVal = G + H;
                             //System.Diagnostics.Debug.WriteLine(x+":"+y+" ["+tiles[x, y].F+"]");
 
-                            if (tiles[x, y].F < tempF)
+                            if (tiles[x, y].TileVal < tempF)
                             {
-                                tempF = tiles[x, y].F;
+                                tempF = tiles[x, y].TileVal;
                                 nextX = x;
                                 nextY = y;
                             }
