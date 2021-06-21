@@ -30,6 +30,19 @@ namespace Nihilquest
         internal List<Enemy> Enemies { get => enemies; set => enemies = value; }
         internal List<Item> Items { get => items; set => items = value; }
 
+        public Room(List<Enemy> enemies, Boss boss, List<Item> items, Cell[,] tileMap, bool isStart, bool isBoss, bool isItem, Player player, int gridSize, int tileSize)
+        {
+            this.enemies = enemies;
+            this.boss = boss;
+            this.items = items;
+            this.tileMap = tileMap;
+            this.isStart = isStart;
+            this.isBoss = isBoss;
+            this.isItem = isItem;
+            this.player = player;
+            this.gridSize = gridSize;
+            this.tileSize = tileSize;
+        }
 
         public Room()
         {
