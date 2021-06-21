@@ -8,7 +8,6 @@ namespace Nihilquest
     class Player : Character
     {
         protected int manaRegen;
-        protected ArrayList actionList;
         protected List<Item> inventory = new List<Item>();
         public Player(string name, int posX, int posY)
         { 
@@ -20,8 +19,6 @@ namespace Nihilquest
             Mana = 40;
             Range = 2;
             ManaRegen = 5;
-            actionList = new ArrayList();
-            actionList.Add("Attack");
         }
 
         public int ManaRegen { get => manaRegen; set => manaRegen = value; }

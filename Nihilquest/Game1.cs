@@ -44,7 +44,7 @@ namespace Nihilquest
         private int playerRoomX;
         private int playerRoomY;
         public static Player P;
-
+        public int currentLevel;
         private int eIndex;
 
         MouseState mouseState;
@@ -198,11 +198,6 @@ namespace Nihilquest
             if (MediaPlayer.State != MediaState.Playing)
             {
                 MediaPlayer.Play(BGMlist[rand.Next(BGMlist.Count)]);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.T))
-            {
-                playerTurn = true;
             }
 
             
