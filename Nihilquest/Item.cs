@@ -35,6 +35,10 @@ namespace Nihilquest
         {
         }
 
+        public Item()
+        {
+        }
+
         public int AddDmg { get => addDmg; set => addDmg = value; }
         public int AddMana { get => addMana; set => addMana = value; }
         public int PosX { get => posX; set => posX = value; }

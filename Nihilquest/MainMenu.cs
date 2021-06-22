@@ -143,11 +143,54 @@ namespace Nihilquest
                         //Loading current level
                         Game1.currentLevel = Convert.ToInt32(xml.Element("Root").Element("CurrentLevel").Value);
 
-                        //Loading Rooms
-                        List<XElement> xElementList = xml.Element("Root").Element("Player").Descendants("Inventory").Descendants("Item").ToList();
-                        foreach (Room room in Game1.roomMap) {
-                            
-                        }
+                        /*//Loading Rooms
+                        List<XElement> RoomList = xml.Element("Root").Element("Level").Descendants("Room").ToList();
+
+                        int x = 0;
+                        
+                        for (int i = 0; i < Game1.roomMap.GetLength(0); i++)
+                        {
+                            for (int j = 0; j < Game1.roomMap.GetLength(1); j++)
+                            {
+                                if (RoomList[x].Value != "")
+                                {
+                                    if (Game1.roomMap[i, j] == null) Game1.roomMap[i, j] = new Room();
+                                    if (RoomList[x].Element("Boss").Value != "")
+                                    {
+                                        Game1.roomMap[i, j].Boss.Name = RoomList[x].Element("Boss").Element("Name").Value;
+                                        Game1.roomMap[i, j].Boss.PosX = Convert.ToInt32(RoomList[x].Element("Boss").Element("PosX").Value);
+                                        Game1.roomMap[i, j].Boss.PosY = Convert.ToInt32(RoomList[x].Element("Boss").Element("PosY").Value);
+                                        Game1.roomMap[i, j].Boss.Dmg = Convert.ToInt32(RoomList[x].Element("Boss").Element("Dmg").Value);
+                                        Game1.roomMap[i, j].Boss.Hp = Convert.ToInt32(RoomList[x].Element("Boss").Element("Hp").Value);
+                                        Game1.roomMap[i, j].Boss.Range = Convert.ToInt32(RoomList[x].Element("Boss").Element("Range").Value);
+                                    }
+                                    Game1.roomMap[i, j].IsBoss = Convert.ToBoolean(RoomList[x].Element("IsBoss").Value);
+                                    Game1.roomMap[i, j].IsStart = Convert.ToBoolean(RoomList[x].Element("IsStart").Value);
+                                    Game1.roomMap[i, j].IsItem = Convert.ToBoolean(RoomList[x].Element("IsItem").Value);
+
+                                    Game1.roomMap[i, j].Items.Clear();
+                                    List<XElement> RoomItems = RoomList[x].Descendants("Items").Descendants("Item").ToList();
+                                    foreach (XElement xe in RoomItems)
+                                    {
+                                        if (xe.Value != "") Game1.roomMap[i, j].Items.Add(new Item(xe.Element("ItemName").Value, Convert.ToInt32(xe.Element("PosX").Value), Convert.ToInt32(xe.Element("PosY").Value)));
+                                        else
+                                        {
+                                            Game1.roomMap[i, j].Items = new List<Item>();
+                                        }
+                                    }
+
+                                    Game1.roomMap[i, j].Enemies.Clear();
+                                    List<XElement> RoomEnemies = RoomList[x].Descendants("Enemies").ToList();
+                                    if (RoomEnemies.Count != 0)
+                                    {
+                                        foreach (XElement xe in RoomItems)
+                                        {
+                                            if (xe.Value != "") Game1.roomMap[i, j].Enemies.Add(new Enemy(xe.Element("Name").Value, Convert.ToInt32(xe.Element("PosX").Value), Convert.ToInt32(xe.Element("PosY").Value)));
+                                        }
+                                    }
+                                }
+                            }
+                        }*/
                     }
                 }
 
@@ -209,17 +252,15 @@ namespace Nihilquest
                                                                ));
                             }
 
-                            if (room.Items.Count() != 0)
+                            foreach (Item item in room.Items)
                             {
-                                foreach (Item item in room.Items)
-                                {
-                                    xml.Element("Root").Element("Level").Element("Room").Element("Items").Add(new XElement("Item",
-                                                                                                                    new XElement("ItemName", item.ItemName),
-                                                                                                                    new XElement("PosX", item.PosX),
-                                                                                                                    new XElement("PosY", item.PosY)
-                                                                                                                    ));
+                                if (item == null) continue;
+                                xml.Element("Root").Element("Level").Element("Room").Element("Items").Add(new XElement("Item",
+                                                                                                                new XElement("ItemName", item.ItemName),
+                                                                                                                new XElement("PosX", item.PosX),
+                                                                                                                new XElement("PosY", item.PosY)
+                                                                                                                ));
 
-                                }
                             }
 
                             if (room.Enemies.Count() != 0)

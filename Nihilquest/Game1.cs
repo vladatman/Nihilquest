@@ -19,7 +19,7 @@ namespace Nihilquest
         private SpriteBatch _spriteBatch;
 
         public static string appDataFilePath;
-        
+
 
         Texture2D[] tileTexture = new Texture2D[8];
         Texture2D playerTexture;
@@ -58,6 +58,13 @@ namespace Nihilquest
         public static int windowHeight = 640;
 
         private int randItem;
+        private Item mana = new Item("Mana flask", 1, 2);
+        private Item sword = new Item("Sword", 1, 1);
+        private Item health = new Item("Health", 8, 8);
+        private Item halfMana = new Item("Half Mana", 8, 7);
+        private Item halfHealth = new Item("Half Health", 8, 1);
+        private ActiveItem activeItemTest = new ActiveItem("Active", 8, 2, 1);
+
         private bool mouseClick = false;
 
 
@@ -78,13 +85,13 @@ namespace Nihilquest
 
             playerRoomX = 1;
             playerRoomY = 1;
-            
+
             P = new Player("Wairen", 5, 5);
             eIndex = 0;
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
-             
+
 
             IsMouseVisible = true;
 
@@ -122,6 +129,7 @@ namespace Nihilquest
             healthTexture = this.Content.Load<Texture2D>("heart_full");
             halfHealthTexture = this.Content.Load<Texture2D>("heart_half");
             halfManaTexture = this.Content.Load<Texture2D>("small_flask_blue");
+            activeItemTest.Texture = this.Content.Load<Texture2D>("flask_big_blue");
             damageUITexture = this.Content.Load<Texture2D>("ui_damage");
             rangeUITexture = this.Content.Load<Texture2D>("ui_range");
             bossRoom = this.Content.Load<Texture2D>("skull");
@@ -184,7 +192,7 @@ namespace Nihilquest
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
 
             main.LoadContent(Content);
-            
+
 
         }
 
@@ -197,7 +205,21 @@ namespace Nihilquest
                 MediaPlayer.Play(BGMlist[rand.Next(BGMlist.Count)]);
             }
 
-            
+            // Check for keypress to activate special item ability
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+	        {
+                if (playerTurn)
+	            {
+                    foreach (ActiveItem item in P.Inventory)
+	                {
+                        if (item is ActiveItem)
+	                    {
+                            item.ability(roomMap, playerRoomX, playerRoomY);
+	                    }
+	                }
+	            }
+	        }
+
             if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
             {
                 mouseClick = true;
@@ -212,7 +234,7 @@ namespace Nihilquest
             {
                 if (roomMap[playerRoomX, playerRoomY].Boss.isDead())
                 {
-                    
+
                     if (bossItem)
                     {
                         createItem(playerRoomX, playerRoomY, 4, 4);
@@ -291,7 +313,7 @@ namespace Nihilquest
                                         playerTurn = false;
                                         //item pickup
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
-                                        {           
+                                        {
                                             soundEffectInstance = SFXlist[3].CreateInstance();
                                             soundEffectInstance.Volume = 0.1f;
                                             soundEffectInstance.Play();
@@ -380,7 +402,7 @@ namespace Nihilquest
                         {
                             while (eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
-                                
+
                                 if (!playerTurn && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX - roomMap[playerRoomX, playerRoomY].Player.PosX) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY - roomMap[playerRoomX, playerRoomY].Player.PosY) <= roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Range)
                                 {
                                     roomMap[playerRoomX, playerRoomY].Enemies[eIndex].Attack(roomMap[playerRoomX, playerRoomY].Player);
@@ -396,7 +418,7 @@ namespace Nihilquest
                                     roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].Character = roomMap[playerRoomX, playerRoomY].Enemies[eIndex];
                                     roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosX, roomMap[playerRoomX, playerRoomY].Enemies[eIndex].PosY].IsLegal = false;
                                     eIndex++;
-                                } 
+                                }
                                 else
                                 {
                                     eIndex = roomMap[playerRoomX, playerRoomY].Enemies.Count;
@@ -499,6 +521,7 @@ namespace Nihilquest
             _spriteBatch.Draw(healthTexture, new Vector2(670, 30), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Hp, new Vector2(690, 30), Color.White);
             _spriteBatch.Draw(halfManaTexture, new Vector2(670, 50), Color.White);
+            _spriteBatch.Draw(activeItemTest.Texture, new Vector2(670, 50), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Mana, new Vector2(690, 50), Color.White);
             _spriteBatch.Draw(damageUITexture, new Vector2(672, 70), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(690, 70), Color.White);
@@ -688,4 +711,3 @@ namespace Nihilquest
         }
     }
 }
-
