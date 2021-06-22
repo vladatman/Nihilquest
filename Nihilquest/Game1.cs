@@ -306,6 +306,7 @@ namespace Nihilquest
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
                                         roomMap[playerRoomX, playerRoomY].Player.PosY = j;
                                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = roomMap[playerRoomX, playerRoomY].Player;
+                                        playerTurn = false;
                                         //item pickup
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
                                         {
@@ -314,8 +315,7 @@ namespace Nihilquest
                                             soundEffectInstance.Play();
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                             roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item = null;
-                                            roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
-                                            playerTurn = false;
+                                            roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item); 
                                         }
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0 && canLeave)
                                         {

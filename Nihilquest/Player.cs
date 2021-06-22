@@ -47,6 +47,7 @@ namespace Nihilquest
 
             if (item is ActiveItem)
             {
+                inventory.Remove(activeItem);
                 activeItem = item as ActiveItem;
             }
         }
