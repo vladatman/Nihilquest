@@ -9,6 +9,7 @@ namespace Nihilquest
     {
         protected int manaRegen;
         protected List<Item> inventory = new List<Item>();
+        protected ActiveItem activeItem;
         public Player(string name, int posX, int posY)
         { 
             Name = name;
@@ -31,7 +32,9 @@ namespace Nihilquest
             ManaRegen = 5;
         }
         public int ManaRegen { get => manaRegen; set => manaRegen = value; }
+        public ActiveItem ActiveItem { get => activeItem; set => activeItem = value; }
         public List<Item> Inventory { get => inventory; set => inventory = value; }
+
 
         public void pickUpItem(Item item)
         {
@@ -41,6 +44,11 @@ namespace Nihilquest
             ManaRegen += item.AddManaRegen;
 
             Inventory.Add(item);
+
+            if (item is ActiveItem)
+            {
+                activeItem = item as ActiveItem;
+            }
         }
         public bool isInInventory(Item item)
         {
