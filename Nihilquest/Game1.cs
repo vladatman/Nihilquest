@@ -184,9 +184,6 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
 
-            OldDmg = roomMap[playerRoomX, playerRoomY].Player.Dmg;
-            OldRange = roomMap[playerRoomX, playerRoomY].Player.Range;
-
             main.LoadContent(Content);
 
 
@@ -318,6 +315,7 @@ namespace Nihilquest
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                             roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item = null;
                                             roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
+                                            playerTurn = false;
                                         }
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0 && canLeave)
                                         {
@@ -399,10 +397,7 @@ namespace Nihilquest
                         //enemies attack
                         else
                         {
-                            if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null)
-                            {
-                                roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
-                            }
+
                             while (eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
 
