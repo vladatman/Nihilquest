@@ -22,8 +22,8 @@ namespace Nihilquest
         }
         public Player()
         {
-            PosX = 5;
-            PosY = 5;
+            PosX = 4;
+            PosY = 4;
             Dmg = 5;
             Hp = 100;
             Mana = 40;

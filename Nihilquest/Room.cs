@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Nihilquest
@@ -129,7 +130,7 @@ namespace Nihilquest
         public void generateRoomInside()
         {
             Random rand = new Random();
-            String path  = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "rooms\\room" + rand.Next(1, 10) + ".png");
+            String path = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().Parent.FullName, @"Nihilquest\Nihilquest\Content\rooms\room" + rand.Next(1, 10)+".png");
             System.Diagnostics.Debug.WriteLine(path);
             imgReader imgReader = new imgReader(path);
             Cell[,] cellMap = imgReader.readImg();
