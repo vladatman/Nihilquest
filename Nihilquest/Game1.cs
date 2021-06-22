@@ -53,8 +53,8 @@ namespace Nihilquest
         private int eIndex;
         private bool bossItem = true;
         MouseState mouseState;
-        int OldDmg;
-        int OldRange;
+        public static bool playerRestart = true;
+
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
@@ -213,10 +213,9 @@ namespace Nihilquest
 	        }
             if (roomMap[playerRoomX, playerRoomY].Player.isDead())
             {
-                
                 main.gameState = GameState.mainMenu;
                 newLevel(true);
-
+                playerRestart = false;
             }
 
             if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
@@ -484,6 +483,7 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Character = null;
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].IsLegal = true;
                         roomMap[playerRoomX, playerRoomY].TileMap[5, 5].IsExit = true;
+                        //add mana regen here
                         canLeave = true;
                     }
                 }
@@ -688,7 +688,7 @@ namespace Nihilquest
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
-
+            bossItem = true;
             for (int i = 0; i < rg.MapSize; i++)
             {
                 for (int j = 0; j < rg.MapSize; j++)
