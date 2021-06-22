@@ -11,7 +11,7 @@ namespace Nihilquest
             Name = name;
             PosX = posX;
             PosY = posY;
-            Dmg = 5;
+            Dmg = 2;
             Hp = 20;
             Range = 2;
         }

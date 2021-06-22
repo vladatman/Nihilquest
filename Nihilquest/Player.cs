@@ -15,7 +15,7 @@ namespace Nihilquest
             PosX = posX;
             PosY = posY;
             Dmg = 5;
-            Hp = 50;
+            Hp = 5000;
             Mana = 40;
             Range = 2;
             ManaRegen = 5;
