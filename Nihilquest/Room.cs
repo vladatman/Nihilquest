@@ -131,7 +131,6 @@ namespace Nihilquest
         {
             Random rand = new Random();
             String path = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().Parent.FullName, @"Nihilquest\Nihilquest\Content\rooms\room" + rand.Next(1, 10)+".png");
-            System.Diagnostics.Debug.WriteLine(path);
             imgReader imgReader = new imgReader(path);
             Cell[,] cellMap = imgReader.readImg();
             for (int i = 0; i < GridSize; ++i)

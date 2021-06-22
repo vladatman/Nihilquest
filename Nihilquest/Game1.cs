@@ -54,7 +54,7 @@ namespace Nihilquest
         private bool bossItem = true;
         MouseState mouseState;
         public static bool playerRestart = true;
-
+        private bool isKeyPressed;
         public static int windowWidth = 960;
         public static int windowHeight = 640;
 
@@ -68,7 +68,7 @@ namespace Nihilquest
 
         private bool playerTurn = true;
         private SpriteFont font;
-        private bool canLeave = true;
+        public static bool canLeave = true;
         public Game1()
         {
             currentLevel = 1;
@@ -81,7 +81,7 @@ namespace Nihilquest
 
             playerRoomX = 1;
             playerRoomY = 1;
-
+            isKeyPressed=false;
             P = new Player("Wairen", 5, 5);
             eIndex = 0;
             rg = new RoomGeneration();
@@ -198,7 +198,7 @@ namespace Nihilquest
             }
 
             // Check for keypress to activate special item ability
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && !isKeyPressed)
 	        {
                 if (playerTurn)
                 {
@@ -207,7 +207,9 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].Player.ActiveItem.Ability(roomMap, playerRoomX, playerRoomY);
                     }
                 }
+                isKeyPressed = true;
 	        }
+            if (Keyboard.GetState().IsKeyUp(Keys.W)) isKeyPressed = false;
             if (roomMap[playerRoomX, playerRoomY].Player.isDead())
             {
                 main.gameState = GameState.mainMenu;
@@ -287,6 +289,10 @@ namespace Nihilquest
                         }
                         if (playerTurn)
                         {
+                            if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
+                            {
+                                roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
+                            }
                             eIndex = 0;
                             //hover highlight
                             if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
@@ -315,7 +321,8 @@ namespace Nihilquest
                                             soundEffectInstance.Play();
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                             roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item = null;
-                                            roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item); 
+                                            roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
+                                            playerTurn = false;
                                         }
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0 && canLeave)
                                         {
@@ -397,7 +404,6 @@ namespace Nihilquest
                         //enemies attack
                         else
                         {
-
                             while (eIndex < roomMap[playerRoomX, playerRoomY].Enemies.Count)
                             {
 
@@ -478,7 +484,6 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Character = null;
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].IsLegal = true;
                         roomMap[playerRoomX, playerRoomY].TileMap[5, 5].IsExit = true;
-                        //add mana regen here
                         canLeave = true;
                     }
                 }
@@ -623,7 +628,7 @@ namespace Nihilquest
         {
             randItem = new Random().Next(4);
             ActiveItem item = new ActiveItem();
-            switch (randItem)
+            switch (3)
             {
                 case 0:
                     item = new ActiveItem("Staff of death", posX, posY, 1);
@@ -684,6 +689,7 @@ namespace Nihilquest
             rg.generateRoom();
             roomMap = rg.Level;
             bossItem = true;
+            canLeave = true;
             for (int i = 0; i < rg.MapSize; i++)
             {
                 for (int j = 0; j < rg.MapSize; j++)
@@ -704,7 +710,6 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsItem == true)
                         {
-                            //add active item here
                             createActiveItem(i, j, 4, 5);
                         }
                     }
