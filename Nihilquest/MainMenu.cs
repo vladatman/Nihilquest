@@ -73,6 +73,7 @@ namespace Nihilquest
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !isKeyPressed)
                     {
                         gameState = GameState.mainMenu;
+                        Game1.playerRestart = true;
                         isKeyPressed = true;
                     }
                     if (Keyboard.GetState().IsKeyUp(Keys.Escape)) isKeyPressed = false;
