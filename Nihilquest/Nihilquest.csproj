@@ -6,8 +6,11 @@
     <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <PropertyGroup>
+    <ApplicationIcon>nihil.ico</ApplicationIcon>
+    <Win32Resource />
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <StartupObject>Nihilquest.Program</StartupObject>
+    <Company>NHLStenden</Company>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\obj\DesktopGL\songs\Invitation.mgcontent" />
@@ -28,5 +31,6 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 </Project>

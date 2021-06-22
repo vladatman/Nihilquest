@@ -66,6 +66,10 @@ namespace Nihilquest
 
                 }
             }
+            if (isBoss == false && isItem == false && isStart == false)
+            {
+                generateRoomInside();
+            }
         }
         public void createWalls()
         {
@@ -118,10 +122,38 @@ namespace Nihilquest
                     tileMap[0, o].IsDoor = true;
                     tileMap[0, o].IsWall = false;
                 }
-                
-
             }
 
+        }
+        public void generateRoomInside()
+        {
+            Random rand = new Random();
+
+            imgReader imgReader = new imgReader(@"D:\School\Nihilquest\Code\Nihilquest\Nihilquest\Content\rooms\room"+rand.Next(1,10)+".png");
+            Cell[,] cellMap = imgReader.readImg();
+            for (int i = 0; i < GridSize; ++i)
+            {
+                for (int j = 0; j < GridSize; ++j)
+                {
+                   if(cellMap[i,j]!= null)
+                    {
+                        if(cellMap[i, j].IsWall)
+                        {
+                            tileMap[i, j].IsWall = true;
+                            tileMap[i, j].IsLegal = false;
+                        }
+                        else if (cellMap[i, j].isEnemy())
+                        {
+                            Enemy e = new Enemy("mob", i, j);
+                            Enemies.Add(e);
+                            tileMap[i, j].Character = e;
+                            tileMap[i, j].IsLegal = false;
+                        }
+
+
+                    }
+                }
+            }
         }
     }
 

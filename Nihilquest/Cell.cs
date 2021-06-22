@@ -19,6 +19,9 @@ namespace Nihilquest
             this.rectangle = rectangle;
             this.isLegal = isLegal;
         }
+        public Cell()
+        {
+        }
 
         public Rectangle Rectangle { get => rectangle; set => rectangle = value; }
         public bool IsLegal { get => isLegal; set => isLegal = value; }
@@ -36,6 +39,10 @@ namespace Nihilquest
         public bool hasItem()
         {
             return Item != null;
+        }
+        public bool isEnemy()
+        {
+            return Character is Enemy;
         }
     }
 }

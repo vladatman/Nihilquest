@@ -27,8 +27,8 @@ namespace Nihilquest
         {
             main.Add(new GUIElement("bg"));
             main.Add(new GUIElement("button_play"));
-            main.Add(new GUIElement("button_load"));
-            main.Add(new GUIElement("button_save"));
+            //main.Add(new GUIElement("button_load"));
+            //main.Add(new GUIElement("button_save"));
             main.Add(new GUIElement("button_exit"));
         }
 
@@ -41,10 +41,10 @@ namespace Nihilquest
                 element.clickEvent += onClick;
             }
 
-            main.Find(x => x.AssetName == "button_play").MoveElement(0, -200);
-            main.Find(x => x.AssetName == "button_load").MoveElement(0, -50);
-            main.Find(x => x.AssetName == "button_save").MoveElement(0, 100);
-            main.Find(x => x.AssetName == "button_exit").MoveElement(0, 250);
+            main.Find(x => x.AssetName == "button_play").MoveElement(0, -100);
+            //main.Find(x => x.AssetName == "button_load").MoveElement(0, -50);
+            //main.Find(x => x.AssetName == "button_save").MoveElement(0, 100);
+            main.Find(x => x.AssetName == "button_exit").MoveElement(0, 75);
             gameState = GameState.mainMenu;
 
             save = new Save(1, "Nihilquest");

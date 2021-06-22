@@ -15,12 +15,21 @@ namespace Nihilquest
             PosX = posX;
             PosY = posY;
             Dmg = 5;
-            Hp = 5000;
+            Hp = 100;
             Mana = 40;
             Range = 2;
             ManaRegen = 5;
         }
-
+        public Player()
+        {
+            PosX = 4;
+            PosY = 4;
+            Dmg = 5;
+            Hp = 100;
+            Mana = 40;
+            Range = 2;
+            ManaRegen = 5;
+        }
         public int ManaRegen { get => manaRegen; set => manaRegen = value; }
         public List<Item> Inventory { get => inventory; set => inventory = value; }
 

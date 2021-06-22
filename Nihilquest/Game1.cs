@@ -7,6 +7,7 @@ using System.Runtime;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Audio;
+using System.Diagnostics;
 
 namespace Nihilquest
 {
@@ -45,7 +46,6 @@ namespace Nihilquest
         private RoomGeneration rg;
         public  static Room[,] exploredRooms;
 
-
         private int playerRoomX;
         private int playerRoomY;
         public static Player P;
@@ -58,11 +58,6 @@ namespace Nihilquest
         public static int windowHeight = 640;
 
         private int randItem;
-        private Item mana = new Item("Mana flask", 1, 2);
-        private Item sword = new Item("Sword", 1, 1);
-        private Item health = new Item("Health", 8, 8);
-        private Item halfMana = new Item("Half Mana", 8, 7);
-        private Item halfHealth = new Item("Half Health", 8, 1);
         private ActiveItem activeItemTest = new ActiveItem("Active", 8, 2, 1);
 
         private bool mouseClick = false;
@@ -75,7 +70,7 @@ namespace Nihilquest
         private bool canLeave = true;
         public Game1()
         {
-
+            currentLevel = 1;
             appDataFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -91,7 +86,6 @@ namespace Nihilquest
             rg = new RoomGeneration();
             rg.generateRoom();
             roomMap = rg.Level;
-
 
             IsMouseVisible = true;
 
@@ -178,15 +172,13 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsItem == true)
                         {
+                            //add active item here
                             createItem(i,j,4, 5);
                         }
                     }
 
                 }
             }
-
-            createEnemy("mob1", 5, 6);
-            createEnemy("mob1", 5, 7);
 
             roomMap[playerRoomX, playerRoomY].Player = P;
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
@@ -219,6 +211,13 @@ namespace Nihilquest
 	                }
 	            }
 	        }
+            if (roomMap[playerRoomX, playerRoomY].Player.isDead())
+            {
+                
+                main.gameState = GameState.mainMenu;
+                newLevel(true);
+
+            }
 
             if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
             {
@@ -242,6 +241,7 @@ namespace Nihilquest
                     bossItem = false;
                 }
             }
+
             main.Update();
 
             base.Update(gameTime);
@@ -271,7 +271,7 @@ namespace Nihilquest
                         //tilemap rendering
                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsWall)
                         {
-                            _spriteBatch.Draw(obstTexture, roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
+                           _spriteBatch.Draw(obstTexture, roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle, Color.White);
                         }
                         else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsDoor)
                         {
@@ -382,7 +382,7 @@ namespace Nihilquest
                                         }
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsExit)
                                         {
-                                            newLevel();
+                                            newLevel(false);
                                         }
                                     }
                                     //attack enemy
@@ -527,14 +527,17 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Dmg, new Vector2(690, 70), Color.White);
             _spriteBatch.Draw(rangeUITexture, new Vector2(670, 90), Color.White);
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Range, new Vector2(690, 90), Color.White);
+            /*
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
             // Inventory
+
             int invY = 30;
             foreach (Item item in roomMap[playerRoomX, playerRoomY].Player.Inventory)
             {
-                _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
-                invY += 20;
+            _spriteBatch.DrawString(font, "" + item.ItemName, new Vector2(770, invY), Color.White);
+            invY += 20;
             }
+            */
             main.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -586,7 +589,7 @@ namespace Nihilquest
                     item.Texture = healthTexture;
                     item.AddMana = 0;
                     item.AddDmg = 0;
-                    item.AddHealth = 20;
+                    item.AddHealth = 30;
                     break;
                 case 3:
                     item = new Item("Half Mana", posX, posY);
@@ -600,14 +603,14 @@ namespace Nihilquest
                     item.Texture = halfHealthTexture;
                     item.AddMana = 0;
                     item.AddDmg = 0;
-                    item.AddHealth = 10;
+                    item.AddHealth = 15;
                     break;
                 default:
                     item = new Item("Half Health", posX, posY);
                     item.Texture = halfHealthTexture;
                     item.AddMana = 0;
                     item.AddDmg = 0;
-                    item.AddHealth = 10;
+                    item.AddHealth = 15;
                     break;
             }
             if (roomMap[roomX, roomY].TileMap[item.PosX, item.PosY].Item == null)
@@ -632,9 +635,20 @@ namespace Nihilquest
             return false;
         }
 
-        private void newLevel()
+        private void newLevel(bool isRestart)
         {
-            Player temp = roomMap[playerRoomX, playerRoomY].Player;
+            Player temp;
+            if (isRestart)
+            {
+                temp = new Player();
+                currentLevel = 1;
+            }
+            else
+            {
+                temp = roomMap[playerRoomX, playerRoomY].Player;
+                currentLevel++;
+            }
+
             exploredRooms = new Room[rg.MapSize, rg.MapSize];
             rg = new RoomGeneration();
             rg.generateRoom();
@@ -658,7 +672,11 @@ namespace Nihilquest
                         {
                             createBoss("boss1", i, j);
                         }
-
+                        if (roomMap[i, j].IsItem == true)
+                        {
+                            //add active item here
+                            createItem(i, j, 4, 5);
+                        }
                     }
 
                 }
@@ -709,5 +727,6 @@ namespace Nihilquest
             next[1] = nextY;
             return next;
         }
+    
     }
 }
