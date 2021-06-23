@@ -28,8 +28,8 @@ namespace Nihilquest
 
         public void Ability(Room[,] roomMap , int playerRoomX, int playerRoomY){
             var Player = roomMap[playerRoomX, playerRoomY].Player;
-            OldRange = Player.Range;
-            OldDamage = Player.Dmg;
+            //OldRange = Player.Range;
+            //OldDamage = Player.Dmg;
             switch (itemType)
 	        {
                 // Deal damage to everything
@@ -38,10 +38,15 @@ namespace Nihilquest
                     {
                         foreach (Enemy enemy in roomMap[playerRoomX, playerRoomY].Enemies)
                         {
-                            if (!enemy.isDead())
+                            if (!enemy.isDead() )
                             {
                                 enemy.Hp -= damageToDeal + Player.Dmg;
+                                
                             }
+                        }
+                        if(!roomMap[playerRoomX, playerRoomY].Boss.isDead() && roomMap[playerRoomX, playerRoomY].Boss != null)
+                        {
+                            roomMap[playerRoomX, playerRoomY].Boss.Hp -= damageToDeal + Player.Dmg;
                         }
                         Player.Mana -= 40;
                     }
@@ -50,11 +55,12 @@ namespace Nihilquest
                 case 2:
                     if (Player.Mana >= 20)
                     {
-                        if (!Player.isDead())
+                        if (!Player.isDead() && Player.Hp < Player.MaxHealth)
                         {
                             Player.Hp += hpToHeal;
+                            Player.Mana -= 20;
                         }
-                        Player.Mana -= 20;
+
                     }
                     break;
 

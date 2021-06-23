@@ -10,6 +10,8 @@ namespace Nihilquest
         protected int manaRegen;
         protected List<Item> inventory = new List<Item>();
         protected ActiveItem activeItem;
+        private int maxMana;
+        private int maxHealth;
         public Player(string name, int posX, int posY)
         { 
             Name = name;
@@ -18,6 +20,8 @@ namespace Nihilquest
             Dmg = 5;
             Hp = 100;
             Mana = 40;
+            MaxHealth = 100;
+            MaxMana = 60;
             Range = 2;
             ManaRegen = 5;
         }
@@ -34,13 +38,14 @@ namespace Nihilquest
         public int ManaRegen { get => manaRegen; set => manaRegen = value; }
         public ActiveItem ActiveItem { get => activeItem; set => activeItem = value; }
         public List<Item> Inventory { get => inventory; set => inventory = value; }
-
+        public int MaxMana { get => maxMana; set => maxMana = value; }
+        public int MaxHealth { get => maxHealth; set => maxHealth = value; }
 
         public void pickUpItem(Item item)
         {
             Dmg += item.AddDmg;
-            Mana += item.AddMana;
-            Hp += item.AddHealth;
+            maxMana += item.AddMana;
+            MaxHealth += item.AddHealth;
             ManaRegen += item.AddManaRegen;
 
             Inventory.Add(item);

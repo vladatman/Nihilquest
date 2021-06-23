@@ -38,6 +38,9 @@ namespace Nihilquest
         Texture2D bossRoom;
         Texture2D ladder;
         Texture2D mainUI;
+        Texture2D staffOfDeath;
+        Texture2D unendingHealing;
+
         Song BGMstart;
         List<Song> BGMlist;
         List<SoundEffect> SFXlist;
@@ -131,6 +134,8 @@ namespace Nihilquest
             itemRoom = this.Content.Load<Texture2D>("chest_full_open_anim_f2");
             ladder = this.Content.Load<Texture2D>("floor_ladder");
             font = this.Content.Load<SpriteFont>("Text");
+            staffOfDeath = this.Content.Load<Texture2D>("weapon_red_magic_staff");
+            unendingHealing = this.Content.Load<Texture2D>("flask_big_red");
 
             mainUI = this.Content.Load<Texture2D>("UI");
 
@@ -173,7 +178,6 @@ namespace Nihilquest
                         }
                         if (roomMap[i, j].IsItem == true)
                         {
-                            //add active item here
                             createActiveItem(i, j, 4, 5);
                         }
                     }
@@ -254,7 +258,7 @@ namespace Nihilquest
               null, null, null, null);
             int mouseX = Mouse.GetState().X;
             int mouseY = Mouse.GetState().Y;
-            //
+            //minimap
             if (!Contains2D(exploredRooms, roomMap[playerRoomX, playerRoomY]))
             {
                 exploredRooms[playerRoomX, playerRoomY] = roomMap[playerRoomX, playerRoomY];
@@ -289,10 +293,10 @@ namespace Nihilquest
                         }
                         if (playerTurn)
                         {
-                            if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
-                            {
-                                roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
-                            }
+                            //if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
+                            //{
+                            //    roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
+                            //}
                             eIndex = 0;
                             //hover highlight
                             if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
@@ -395,7 +399,6 @@ namespace Nihilquest
                                         soundEffectInstance.Volume = 0.1f;
                                         soundEffectInstance.Play();
                                         roomMap[playerRoomX, playerRoomY].Player.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
-                                        roomMap[playerRoomX, playerRoomY].Player.Mana += roomMap[playerRoomX, playerRoomY].Player.ManaRegen;
                                         playerTurn = false;
                                     }
                                 }
@@ -462,6 +465,7 @@ namespace Nihilquest
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].Character = null;
                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Enemies[e].PosX, roomMap[playerRoomX, playerRoomY].Enemies[e].PosY].IsLegal = true;
                         roomMap[playerRoomX, playerRoomY].Enemies.Remove(roomMap[playerRoomX, playerRoomY].Enemies[e]);
+                        if(roomMap[playerRoomX, playerRoomY].Player.Mana < roomMap[playerRoomX, playerRoomY].Player.MaxMana) roomMap[playerRoomX, playerRoomY].Player.Mana += roomMap[playerRoomX, playerRoomY].Player.ManaRegen;
                     }
                     else
                     {
@@ -533,6 +537,7 @@ namespace Nihilquest
             _spriteBatch.DrawString(font, "" + roomMap[playerRoomX, playerRoomY].Player.Range, new Vector2(690, 90), Color.White);
 
             _spriteBatch.DrawString(font, "Inventory: ", new Vector2(770, 10), Color.White);
+            _spriteBatch.DrawString(font, "Activate Item: W", new Vector2(770, 100), Color.White);
             // Inventory
 
             int invY = 30;
@@ -626,17 +631,17 @@ namespace Nihilquest
         }
         private void createActiveItem(int roomX, int roomY, int posX, int posY)
         {
-            randItem = new Random().Next(4);
+            randItem = new Random().Next(2);
             ActiveItem item = new ActiveItem();
-            switch (3)
+            switch (randItem)
             {
                 case 0:
-                    item = new ActiveItem("Staff of death", posX, posY, 1);
-                    item.Texture = swordTexture;
+                    item = new ActiveItem("Staff of Death", posX, posY, 1);
+                    item.Texture = staffOfDeath;
                     break;
                 case 1:
-                    item = new ActiveItem("Funny healing juice", posX, posY, 2);
-                    item.Texture = swordTexture;
+                    item = new ActiveItem("Infinite Potion", posX, posY, 2);
+                    item.Texture = unendingHealing;
                     break;
                 case 2:
                     item = new ActiveItem("Grabby hand of extension", posX, posY, 3);

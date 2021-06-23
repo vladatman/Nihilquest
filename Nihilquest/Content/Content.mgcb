@@ -121,6 +121,18 @@
 /processorParam:TextureFormat=Color
 /build:flask_big_blue.png
 
+#begin flask_big_red.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:flask_big_red.png
+
 #begin floor_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -589,4 +601,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:weapon_knife.png
+
+#begin weapon_red_magic_staff.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:weapon_red_magic_staff.png
 
