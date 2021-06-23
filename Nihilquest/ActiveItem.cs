@@ -44,9 +44,12 @@ namespace Nihilquest
                                 
                             }
                         }
-                        if(!roomMap[playerRoomX, playerRoomY].Boss.isDead() && roomMap[playerRoomX, playerRoomY].Boss != null)
+                        if(roomMap[playerRoomX, playerRoomY].Boss != null)
                         {
-                            roomMap[playerRoomX, playerRoomY].Boss.Hp -= damageToDeal + Player.Dmg;
+                            if (!roomMap[playerRoomX, playerRoomY].Boss.isDead())
+                            {
+                                roomMap[playerRoomX, playerRoomY].Boss.Hp -= damageToDeal + Player.Dmg;
+                            }
                         }
                         Player.Mana -= 40;
                     }
