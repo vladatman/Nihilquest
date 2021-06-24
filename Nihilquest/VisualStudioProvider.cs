@@ -8,6 +8,8 @@ namespace Nihilquest
 {
     public static class VisualStudioProvider
     {
+        //returns solution path
+        //needed for testing
         public static DirectoryInfo TryGetSolutionDirectoryInfo(string currentPath = null)
         {
             var directory = new DirectoryInfo(

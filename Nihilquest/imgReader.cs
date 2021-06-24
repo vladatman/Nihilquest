@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Nihilquest
 {
+    //reads any image pixel by pixel
+    //needs an img path
     class imgReader
     {
         private Bitmap img;

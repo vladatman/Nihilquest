@@ -40,6 +40,8 @@ namespace Nihilquest
         Texture2D mainUI;
         Texture2D staffOfDeath;
         Texture2D unendingHealing;
+        Texture2D teleportDagger;
+        Texture2D heavyAttack;
         public static Texture2D skeletonTexture;
         public static Texture2D swampTexture;
         public static Texture2D goblinTexture;
@@ -161,7 +163,8 @@ namespace Nihilquest
             skeletonTexture = this.Content.Load<Texture2D>("skelet_idle_anim_f0");
             swampTexture = this.Content.Load<Texture2D>("swampy_idle_anim_f0");
             goblinTexture = this.Content.Load<Texture2D>("goblin_run_anim_f0");
-
+            teleportDagger = this.Content.Load<Texture2D>("teleportdagger");
+            heavyAttack = this.Content.Load<Texture2D>("heavyattack");
             mainUI = this.Content.Load<Texture2D>("UI");
 
             //loading in songs and SFX
@@ -219,7 +222,10 @@ namespace Nihilquest
 
 
         }
-
+        //if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
+        //{
+        //    roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
+        //}
         protected override void Update(GameTime gameTime)
         {
             //randomized music
@@ -286,6 +292,13 @@ namespace Nihilquest
             }
             if (canLeave)
             {
+                if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null)
+                {
+                    if(roomMap[playerRoomX, playerRoomY].Player.ActiveItem.InUse)
+                    {
+                        roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
+                    }
+                }
                 itemDrop = false;
             }
             else
@@ -353,10 +366,6 @@ namespace Nihilquest
                         }
                         if (playerTurn)
                         {
-                            //if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
-                            //{
-                            //    roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
-                            //}
                             eIndex = 0;
                             //hover highlight
                             if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].Rectangle.Contains(mouseX, mouseY) && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
@@ -682,12 +691,12 @@ namespace Nihilquest
                     item.Texture = unendingHealing;
                     break;
                 case 2:
-                    item = new ActiveItem("Grabby hand of extension", posX, posY, 3);
-                    item.Texture = swordTexture;
+                    item = new ActiveItem("Teleport Dagger", posX, posY, 3);
+                    item.Texture = teleportDagger;
                     break;
                 case 3:
-                    item = new ActiveItem("Turbo slap", posX, posY, 4);
-                    item.Texture = swordTexture;
+                    item = new ActiveItem("Heavy Attack", posX, posY, 4);
+                    item.Texture = heavyAttack;
                     break;
 
             }

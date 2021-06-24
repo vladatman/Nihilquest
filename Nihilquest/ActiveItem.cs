@@ -9,8 +9,11 @@ namespace Nihilquest
         private int itemType;
         private int damageToDeal;
         private int hpToHeal;
+        private bool inUse;
         private int OldDamage;
         private int OldRange;
+
+        public bool InUse { get => inUse; set => inUse = value; }
 
         public ActiveItem(string itemName, int posX, int posY, int itemType)
         {
@@ -20,8 +23,8 @@ namespace Nihilquest
             this.itemType = itemType;
             this.damageToDeal = 10;
             this.hpToHeal = 20;
-            OldDamage = 0;
-            OldRange = 0;
+            this.InUse = false;
+
         }
 
         public ActiveItem()
@@ -32,6 +35,7 @@ namespace Nihilquest
             var Player = roomMap[playerRoomX, playerRoomY].Player;
             OldRange = Player.Range;
             OldDamage = Player.Dmg;
+            InUse = true;
             switch (itemType)
 	        {
                 // Deal damage to everything
@@ -95,6 +99,7 @@ namespace Nihilquest
         //resets old player stats
         public void EndItem(Room[,] roomMap, int playerRoomX, int playerRoomY)
         {
+            InUse = false;
             var Player = roomMap[playerRoomX, playerRoomY].Player;
             Player.Range = OldRange;
             Player.Dmg = OldDamage;
