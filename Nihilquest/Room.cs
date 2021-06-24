@@ -147,6 +147,33 @@ namespace Nihilquest
                         else if (cellMap[i, j].isEnemy())
                         {
                             Enemy e = new Enemy("mob", i, j);
+                            switch (new Random().Next(6))
+                            {
+                                //swamp
+                                case 1:
+                                    e.Dmg = 3 * Game1.currentLevel;
+                                    e.Hp = 15 * Game1.currentLevel;
+                                    e.Texture = Game1.swampTexture;
+                                    break;
+                                //slime
+                                case 2:
+                                    e.Range = 4;
+                                    e.Texture = Game1.skeletonTexture;
+                                    break;
+                                case 3:
+                                    e.Dmg = 1 * Game1.currentLevel;
+                                    e.Hp = 5 * Game1.currentLevel;
+                                    e.Texture = Game1.goblinTexture;
+                                    break;
+                                case 4:
+                                    e.Dmg = 1 * Game1.currentLevel;
+                                    e.Hp = 5 * Game1.currentLevel;
+                                    e.Texture = Game1.goblinTexture;
+                                    break;
+                                default:
+                                    e.Texture = Game1.enemyTexture;
+                                    break;
+                            }
                             Enemies.Add(e);
                             tileMap[i, j].Character = e;
                             tileMap[i, j].IsLegal = false;

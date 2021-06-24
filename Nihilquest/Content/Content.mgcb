@@ -241,6 +241,30 @@
 /processorParam:TextureFormat=Color
 /build:floor_ladder.png
 
+#begin floor_test.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floor_test.png
+
+#begin goblin_run_anim_f0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:goblin_run_anim_f0.png
+
 #begin heart_full.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -427,6 +451,18 @@
 /processorParam:Quality=Best
 /build:sfx/Text.wav
 
+#begin skelet_idle_anim_f0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:skelet_idle_anim_f0.png
+
 #begin skull.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -510,6 +546,18 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:songs/Tonal Dissonance.ogg
+
+#begin swampy_idle_anim_f0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:swampy_idle_anim_f0.png
 
 #begin Text.spritefont
 /importer:FontDescriptionImporter

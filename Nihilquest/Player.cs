@@ -17,11 +17,11 @@ namespace Nihilquest
             Name = name;
             PosX = posX;
             PosY = posY;
-            Dmg = 5;
-            Hp = 100;
+            Dmg = 10;
+            Hp = 200;
             Mana = 40;
-            MaxHealth = 100;
-            MaxMana = 60;
+            MaxHealth = 200;
+            MaxMana = 100;
             Range = 2;
             ManaRegen = 5;
         }
@@ -29,9 +29,11 @@ namespace Nihilquest
         {
             PosX = 4;
             PosY = 4;
-            Dmg = 5;
-            Hp = 100;
+            Dmg = 10;
+            Hp = 200;
             Mana = 40;
+            MaxHealth = 200;
+            MaxMana = 100;
             Range = 2;
             ManaRegen = 5;
         }
