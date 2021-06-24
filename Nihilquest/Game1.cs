@@ -772,8 +772,8 @@ namespace Nihilquest
             roomMap[playerRoomX, playerRoomY].Player = temp;
         }
         /*
-         Based on the A(*)(A-star) pathfinding algorithm
-         It assigns either 14 or 10 depending if the related cell is diagnoal to target and/or starting point
+        Based on the A(*)(A-star) pathfinding algorithm
+        It assigns either 14 or 10 depending if the related cell is diagnoal to target and/or starting point
         G is starting point
         H is target point
         F is the sum of G and H
