@@ -43,6 +43,7 @@ namespace Nihilquest
         public int MaxMana { get => maxMana; set => maxMana = value; }
         public int MaxHealth { get => maxHealth; set => maxHealth = value; }
 
+        //add stats to the player
         public void pickUpItem(Item item)
         {
             Dmg += item.AddDmg;
@@ -70,6 +71,5 @@ namespace Nihilquest
             }
             return checkItem;
         }
-        // Shows the inventory in string format on UI
     }
 }

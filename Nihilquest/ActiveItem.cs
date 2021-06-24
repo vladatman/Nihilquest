@@ -20,6 +20,8 @@ namespace Nihilquest
             this.itemType = itemType;
             this.damageToDeal = 10;
             this.hpToHeal = 20;
+            OldDamage = 0;
+            OldRange = 0;
         }
 
         public ActiveItem()
@@ -28,8 +30,8 @@ namespace Nihilquest
 
         public void Ability(Room[,] roomMap , int playerRoomX, int playerRoomY){
             var Player = roomMap[playerRoomX, playerRoomY].Player;
-            //OldRange = Player.Range;
-            //OldDamage = Player.Dmg;
+            OldRange = Player.Range;
+            OldDamage = Player.Dmg;
             switch (itemType)
 	        {
                 // Deal damage to everything
@@ -90,7 +92,7 @@ namespace Nihilquest
                     break;
 	        }
         }
-
+        //resets old player stats
         public void EndItem(Room[,] roomMap, int playerRoomX, int playerRoomY)
         {
             var Player = roomMap[playerRoomX, playerRoomY].Player;

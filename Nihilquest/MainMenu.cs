@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace Nihilquest
 {
+    //TODO: saving and loading
+    // saving is not done but currently everything can be saved in XML
+    // to load everything the code base would need to be refractored
     class MainMenu
     {
 

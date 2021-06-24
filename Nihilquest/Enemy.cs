@@ -13,7 +13,7 @@ namespace Nihilquest
             Name = name;
             PosX = posX;
             PosY = posY;
-            Dmg = 2;
+            Dmg = 2 * Game1.currentLevel;
             Hp = 10 * Game1.currentLevel;
             Range = 1;
         }

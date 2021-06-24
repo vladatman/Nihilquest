@@ -22,6 +22,7 @@ namespace Nihilquest
         public int Dmg { get => dmg; set => dmg = value; }
         public int Range { get => range; set => range = value; }
 
+        //attacks character in range
         public void Attack(Character charA)
         {
             
