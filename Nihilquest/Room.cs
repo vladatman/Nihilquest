@@ -157,12 +157,14 @@ namespace Nihilquest
                                     e.Dmg = 3 * Game1.currentLevel;
                                     e.Hp = 15 * Game1.currentLevel;
                                     e.Texture = Game1.swampTexture;
+                                    e.Range = 2;
                                     break;
                                 //slime
                                 case 2:
                                     e.Range = 4;
                                     e.Texture = Game1.skeletonTexture;
                                     break;
+                                //goblin
                                 case 3:
                                     e.Dmg = 1 * Game1.currentLevel;
                                     e.Hp = 5 * Game1.currentLevel;
@@ -173,6 +175,7 @@ namespace Nihilquest
                                     e.Hp = 5 * Game1.currentLevel;
                                     e.Texture = Game1.goblinTexture;
                                     break;
+                                //imp
                                 default:
                                     e.Texture = Game1.enemyTexture;
                                     break;

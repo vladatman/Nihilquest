@@ -269,19 +269,8 @@ namespace Nihilquest
             //doors opening and closing depending on enemies in the room
             if (roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
             {
-                if (roomMap[playerRoomX, playerRoomY].IsBoss == true)
-                {
-                    if (roomMap[playerRoomX, playerRoomY].Boss.isDead())
-                    {
-                       canLeave = true;
-                    }
-                }
-                else
-                {
-                    canLeave = false;
-                }
                 canLeave = true;
-                if (itemDrop && roomMap[playerRoomX, playerRoomY].TileMap[4,4].IsLegal)
+                if (itemDrop && roomMap[playerRoomX, playerRoomY].TileMap[4,4].IsLegal && roomMap[playerRoomX, playerRoomY].Boss == null)
                 {
                     createItem(playerRoomX, playerRoomY, 4, 4);
                 }
@@ -289,6 +278,21 @@ namespace Nihilquest
             else
             {
                 canLeave = false;
+            }
+            if (roomMap[playerRoomX, playerRoomY].IsBoss == true)
+            {
+                if (roomMap[playerRoomX, playerRoomY].Boss.isDead())
+                {
+                    canLeave = true;
+                    if (itemDrop)
+                    {
+                        createItem(playerRoomX, playerRoomY, 4, 4);
+                    }
+                }
+                else
+                {
+                    canLeave = false;
+                }
             }
             if (canLeave)
             {
@@ -680,7 +684,7 @@ namespace Nihilquest
         private void createActiveItem(int roomX, int roomY, int posX, int posY)
         {
             ActiveItem item = new ActiveItem();
-            switch (new Random().Next(4))
+            switch (2)
             {
                 case 0:
                     item = new ActiveItem("Staff of Death", posX, posY, 1);
