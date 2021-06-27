@@ -12,7 +12,7 @@ namespace Nihilquest
         public static int screenHeight;
         private Room[,] level;
         private int mapSize = 10;
-        private int roomsToGenerate = 10;
+        private int roomsToGenerate = 3;
 
         public int MapSize { get => mapSize; set => mapSize = value; }
         internal Room[,] Level { get => level; set => level = value; }

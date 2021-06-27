@@ -42,6 +42,10 @@ namespace Nihilquest
         Texture2D unendingHealing;
         Texture2D teleportDagger;
         Texture2D heavyAttack;
+        
+        Texture2D healthTexture2;
+        Rectangle rectangle;
+
         public static Texture2D skeletonTexture;
         public static Texture2D swampTexture;
         public static Texture2D goblinTexture;
@@ -166,6 +170,8 @@ namespace Nihilquest
             teleportDagger = this.Content.Load<Texture2D>("teleportdagger");
             heavyAttack = this.Content.Load<Texture2D>("heavyattack");
             mainUI = this.Content.Load<Texture2D>("UI");
+            //healthTexture2 = this.Content.Load<Texture2D>("Health1px");
+            healthTexture2 = this.Content.Load<Texture2D>("Health100px");
 
             //loading in songs and SFX
             BGMstart = this.Content.Load<Song>("songs/Invitation");
@@ -309,6 +315,12 @@ namespace Nihilquest
             {
                 itemDrop = true;
             }
+
+
+            //Update Rectangle
+            //rectangle = new Rectangle(100, 100, Boss.Hp, healthTexture2.Height);
+                
+
             main.Update();
 
             base.Update(gameTime);
@@ -559,7 +571,20 @@ namespace Nihilquest
                     if(roomMap[playerRoomX, playerRoomY].Boss.isDead() == false)
                     {
                         _spriteBatch.Draw(bossTexture, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle, Color.White);
-                        _spriteBatch.DrawString(font, "HP:" + roomMap[playerRoomX, playerRoomY].Boss.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.Y), Color.White);
+
+                        //_spriteBatch.DrawString(font, "HP:" + roomMap[playerRoomX, playerRoomY].Boss.Hp, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.X, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.Y), Color.White);
+
+                        // bossHealthBarTexture red rectangle
+
+                        _spriteBatch.Draw(healthTexture2, new Vector2(roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.X - 20, roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Boss.PosX, roomMap[playerRoomX, playerRoomY].Boss.PosY].Rectangle.Y - 5), Color.White);
+
+                        //_spriteBatch.Draw(healthTexture2, rectangle, Color.White);
+
+                        //rectangle = new Rectangle(100, 100, healthTexture2.Width, healthTexture2.Height);
+
+                        //rectangle = new Rectangle(100, 100, healthTexture2.Width, healthTexture2.Height);
+
+                        //_spriteBatch.Draw(healthTexture2, rectangle, Color.White);
                     }
                     else
                     {

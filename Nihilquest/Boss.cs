@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Nihilquest
 {
-    class Boss : Character
-    {
+    class Boss : Character {
+
         public Boss(string name, int posX, int posY)
         {
             Name = name;
