@@ -732,7 +732,7 @@ namespace Nihilquest
         private void createActiveItem(int roomX, int roomY, int posX, int posY)
         {
             ActiveItem item = new ActiveItem();
-            switch (2)
+            switch (new Random().Next(4))
             {
                 case 0:
                     item = new ActiveItem("Staff of Death", posX, posY, 1);
