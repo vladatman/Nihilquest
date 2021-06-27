@@ -130,12 +130,6 @@ namespace Nihilquest
                 {
                     gameState = GameState.inGame;
                 }
-                if (element == "sfxmute")
-                {
-                    if (Game1.SFXMute) Game1.SFXMute = false;
-                    else Game1.SFXMute = true;
-                    System.Diagnostics.Debug.WriteLine(Game1.SFXMute);
-                }
                 if (element == "button_load")
                 {
                     xml = save.GetFile("XML\\nihilquestSave.xml");

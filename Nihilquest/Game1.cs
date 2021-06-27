@@ -54,7 +54,6 @@ namespace Nihilquest
         Song BGMstart;
         List<Song> BGMlist;
         public static List<SoundEffect> SFXlist;
-        public static bool SFXMute;
         //Room 2D layout
         public static Room[,] roomMap;
         private RoomGeneration rg;
@@ -109,7 +108,6 @@ namespace Nihilquest
 
             BGMlist = new List<Song>();
             SFXlist = new List<SoundEffect>();
-            SFXMute = true;
 
             playerRoomX = 1;
             playerRoomY = 1;
@@ -393,10 +391,8 @@ namespace Nihilquest
                                 {
                                     if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
-                                        if (SFXMute) {
                                             SoundEffectInstance soundEffectInstance = SFXlist[1].CreateInstance();
                                             soundEffectInstance.Play();
-                                        }
                                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = null;
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
                                         roomMap[playerRoomX, playerRoomY].Player.PosY = j;
@@ -405,12 +401,10 @@ namespace Nihilquest
                                         //item pickup
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
                                         {
-                                            if (SFXMute)
-                                            {
-                                                SoundEffectInstance soundEffectInstance = SFXlist[3].CreateInstance();
+
+                                                soundEffectInstance = SFXlist[3].CreateInstance();
                                                 soundEffectInstance.Volume = 0.1f;
                                                 soundEffectInstance.Play();
-                                            }
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                             roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item = null;
                                             roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
@@ -485,12 +479,9 @@ namespace Nihilquest
                                     //attack enemy
                                     else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
                                     {
-                                        if (SFXMute)
-                                        {
                                             SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
                                             soundEffectInstance.Volume = 0.1f;
                                             soundEffectInstance.Play();
-                                        }
                                         roomMap[playerRoomX, playerRoomY].Player.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
                                         playerTurn = false;
                                     }
@@ -541,12 +532,9 @@ namespace Nihilquest
                                 {
                                     roomMap[playerRoomX, playerRoomY].Boss.Attack(roomMap[playerRoomX, playerRoomY].Player);
 
-                                    if (SFXMute)
-                                    {
                                         SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
                                         soundEffectInstance.Volume = 0.1f;
                                         soundEffectInstance.Play();
-                                    }
                                 }
                             }
                             playerTurn = true;
