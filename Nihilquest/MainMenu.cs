@@ -16,7 +16,7 @@ namespace Nihilquest
     class MainMenu
     {
 
-        public GameState gameState;
+        public static GameState gameState;
 
         private bool isKeyPressed = false;
         public Save save;
@@ -25,6 +25,7 @@ namespace Nihilquest
 
 
         List<GUIElement> main = new List<GUIElement>();
+        slideBar musicVolumeBar = new slideBar(0,150);
 
         public MainMenu()
         {
@@ -37,13 +38,14 @@ namespace Nihilquest
 
         public void LoadContent(ContentManager content)
         {
+
             foreach (GUIElement element in main)
             {
                 element.LoadContent(content);
                 element.CenterElement(Game1.windowWidth, Game1.windowHeight);
                 element.clickEvent += onClick;
             }
-
+            musicVolumeBar.LoadContent(content);
             main.Find(x => x.AssetName == "button_play").MoveElement(0, -100);
             //main.Find(x => x.AssetName == "button_load").MoveElement(0, -50);
             //main.Find(x => x.AssetName == "button_save").MoveElement(0, 100);
@@ -57,7 +59,7 @@ namespace Nihilquest
 
         public void Update()
         {
-
+            
             switch (gameState)
             {
                 case GameState.mainMenu:
@@ -65,6 +67,7 @@ namespace Nihilquest
                     {
                         element.Update();
                     }
+                    musicVolumeBar.Update();
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !isKeyPressed)
                     {
                         gameState = GameState.inGame;
@@ -97,14 +100,18 @@ namespace Nihilquest
 
         public void Draw(SpriteBatch spriteBatch)
         {
+
+
             switch (gameState)
             {
                 case GameState.mainMenu:
                     foreach (GUIElement element in main)
                     {
                         element.Draw(spriteBatch);
+
                     }
-                    
+                    musicVolumeBar.Draw(spriteBatch);
+
                     break;
                 case GameState.inGame:
                     break;
@@ -123,7 +130,12 @@ namespace Nihilquest
                 {
                     gameState = GameState.inGame;
                 }
-
+                if (element == "sfxmute")
+                {
+                    if (Game1.SFXMute) Game1.SFXMute = false;
+                    else Game1.SFXMute = true;
+                    System.Diagnostics.Debug.WriteLine(Game1.SFXMute);
+                }
                 if (element == "button_load")
                 {
                     xml = save.GetFile("XML\\nihilquestSave.xml");

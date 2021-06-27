@@ -49,12 +49,12 @@ namespace Nihilquest
         public static Texture2D skeletonTexture;
         public static Texture2D swampTexture;
         public static Texture2D goblinTexture;
-        private SpriteFont font;
+        public static SpriteFont font;
         //SFX and Songs
         Song BGMstart;
         List<Song> BGMlist;
-        List<SoundEffect> SFXlist;
-
+        public static List<SoundEffect> SFXlist;
+        public static bool SFXMute;
         //Room 2D layout
         public static Room[,] roomMap;
         private RoomGeneration rg;
@@ -81,8 +81,8 @@ namespace Nihilquest
         public static bool playerRestart = true;
         //prevents key holding
         private bool isKeyPressed;
-        MouseState mouseState;
-        private bool mouseClick = false;
+        public static MouseState mouseState;
+        public static bool mouseClick = false;
 
         //resolution
         public static int windowWidth = 960;
@@ -109,6 +109,7 @@ namespace Nihilquest
 
             BGMlist = new List<Song>();
             SFXlist = new List<SoundEffect>();
+            SFXMute = true;
 
             playerRoomX = 1;
             playerRoomY = 1;
@@ -229,10 +230,6 @@ namespace Nihilquest
 
 
         }
-        //if (roomMap[playerRoomX, playerRoomY].Player.ActiveItem != null && !canLeave && roomMap[playerRoomX, playerRoomY].Enemies.Count == 0)
-        //{
-        //    roomMap[playerRoomX, playerRoomY].Player.ActiveItem.EndItem(roomMap, playerRoomX, playerRoomY);
-        //}
         protected override void Update(GameTime gameTime)
         {
             //randomized music
@@ -258,12 +255,12 @@ namespace Nihilquest
             //resets everything if player dies and opens menu
             if (roomMap[playerRoomX, playerRoomY].Player.isDead())
             {
-                main.gameState = GameState.mainMenu;
+                MainMenu.gameState = GameState.mainMenu;
                 newLevel(true);
                 playerRestart = false;
             }
 
-            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && main.gameState != GameState.mainMenu)
+            if (mouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && MainMenu.gameState != GameState.mainMenu)
             {
                 mouseClick = true;
             }
@@ -396,8 +393,10 @@ namespace Nihilquest
                                 {
                                     if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].IsLegal && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosX - i) <= roomMap[playerRoomX, playerRoomY].Player.Range && Math.Abs(roomMap[playerRoomX, playerRoomY].Player.PosY - j) <= roomMap[playerRoomX, playerRoomY].Player.Range)
                                     {
-                                        SoundEffectInstance soundEffectInstance = SFXlist[1].CreateInstance();
-                                        soundEffectInstance.Play();
+                                        if (SFXMute) {
+                                            SoundEffectInstance soundEffectInstance = SFXlist[1].CreateInstance();
+                                            soundEffectInstance.Play();
+                                        }
                                         roomMap[playerRoomX, playerRoomY].TileMap[roomMap[playerRoomX, playerRoomY].Player.PosX, roomMap[playerRoomX, playerRoomY].Player.PosY].Character = null;
                                         roomMap[playerRoomX, playerRoomY].Player.PosX = i;
                                         roomMap[playerRoomX, playerRoomY].Player.PosY = j;
@@ -406,9 +405,12 @@ namespace Nihilquest
                                         //item pickup
                                         if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasItem())
                                         {
-                                            soundEffectInstance = SFXlist[3].CreateInstance();
-                                            soundEffectInstance.Volume = 0.1f;
-                                            soundEffectInstance.Play();
+                                            if (SFXMute)
+                                            {
+                                                SoundEffectInstance soundEffectInstance = SFXlist[3].CreateInstance();
+                                                soundEffectInstance.Volume = 0.1f;
+                                                soundEffectInstance.Play();
+                                            }
                                             roomMap[playerRoomX, playerRoomY].Player.pickUpItem(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
                                             roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item = null;
                                             roomMap[playerRoomX, playerRoomY].Items.Remove(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Item);
@@ -483,9 +485,12 @@ namespace Nihilquest
                                     //attack enemy
                                     else if (roomMap[playerRoomX, playerRoomY].TileMap[i, j].hasCharacter())
                                     {
-                                        SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
-                                        soundEffectInstance.Volume = 0.1f;
-                                        soundEffectInstance.Play();
+                                        if (SFXMute)
+                                        {
+                                            SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
+                                            soundEffectInstance.Volume = 0.1f;
+                                            soundEffectInstance.Play();
+                                        }
                                         roomMap[playerRoomX, playerRoomY].Player.Attack(roomMap[playerRoomX, playerRoomY].TileMap[i, j].Character);
                                         playerTurn = false;
                                     }
@@ -535,9 +540,13 @@ namespace Nihilquest
                                 else
                                 {
                                     roomMap[playerRoomX, playerRoomY].Boss.Attack(roomMap[playerRoomX, playerRoomY].Player);
-                                    SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
-                                    soundEffectInstance.Volume = 0.1f;
-                                    soundEffectInstance.Play();
+
+                                    if (SFXMute)
+                                    {
+                                        SoundEffectInstance soundEffectInstance = SFXlist[2].CreateInstance();
+                                        soundEffectInstance.Volume = 0.1f;
+                                        soundEffectInstance.Play();
+                                    }
                                 }
                             }
                             playerTurn = true;
