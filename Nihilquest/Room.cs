@@ -133,7 +133,7 @@ namespace Nihilquest
             Random rand = new Random();
             //path should be changed to releaseFolder\rooms\room(n) for release build
             //currently the root is the folder of the solution
-            String path = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().Parent.FullName, @"Nihilquest\Nihilquest\Content\rooms\room" + rand.Next(1, 10)+".png");
+            String path = Path.Combine(Environment.CurrentDirectory, @"rooms\room" + rand.Next(1, 10)+".png");
             imgReader imgReader = new imgReader(path);
             Cell[,] cellMap = imgReader.readImg();
             for (int i = 0; i < GridSize; ++i)
