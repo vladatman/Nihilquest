@@ -21,8 +21,26 @@ namespace Nihilquest
             get { return assetName; }
             set { assetName = value; }
         }
-
-
+        public int X
+        {
+            get { return GUIRect.X; }
+            set { GUIRect.X = value; }
+        }
+        public int Y
+        {
+            get { return GUIRect.Y; }
+            set { GUIRect.Y = value; }
+        }
+        public int Width
+        {
+            get { return GUIRect.Width; }
+            set { GUIRect.Width = value; }
+        }
+        public int Height
+        {
+            get { return GUIRect.Height; }
+            set { GUIRect.Height = value; }
+        }
         public delegate void ElementClicked(string element);
 
         public event ElementClicked clickEvent;

@@ -463,6 +463,18 @@
 /processorParam:Quality=Best
 /build:sfx/Text.wav
 
+#begin sfxmute.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sfxmute.png
+
 #begin skelet_idle_anim_f0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -486,6 +498,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:skull.png
+
+#begin slider.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:slider.png
 
 #begin small_flask_blue.png
 /importer:TextureImporter
@@ -649,6 +673,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ui_range.png
+
+#begin volbar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:volbar.png
 
 #begin wall_mid.png
 /importer:TextureImporter
